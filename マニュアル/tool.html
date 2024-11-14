@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>tool</title>
+<link href="nscripter.css" rel="stylesheet" type="text/css">
+</head>
+<body><h1>開発ツール解説</h1>
+「開発ツール」フォルダに、NScripter2用の開発ツールがあります（コンソールアプリケーションです）。この開発ツール自体もNScr2.exeで作られています。
+<p><a href="index.html">目次に戻る</a></p>
+<p>NMVファイルはモーションJPEGに近い形式です。圧縮率は低いですが、コーデックによる不具合は起きず、動作も軽めです。特にムービーテクスチャは短いことが多いので、この形式をおすすめします。</p>
+<ol>
+<li><strong>ns2アーカイブ作成</strong>
+<p>ns2形式のアーカイブファイルを作成します。指定したフォルダの中身をひとつのファイルにまとめます。NScr2.exeと同じフォルダに置くことで、生ファイルがあるのと同じようにファイルを読み込めます。<br>ns2アーカイブは日本語ファイル名やフォルダ名には対応していません。また、nmv形式以外のムービーファイルは読み込むことが出来ません（MPEG等は生ファイルで管理して下さい。nmv形式はアーカイブの中から読み込めます）。<br>
+ns2アーカイブは、指定したフォルダの中身があたかもnscr2.exeと同じフォルダにあるかのように振る舞います。つまり、こういうことです。<br>
+<pre><code>
+[data]  ←このフォルダを指定する。
+ |
+ +- system.lua
+ |
+ +- root.lua
+ |
+ +- 00.txt
+ |
+ +- 01.txt
+ |
+ +- [bg]
+ |   |
+ |   +- school.png
+ |
+ +- [sound]
+     |
+     +- se00.ogg
+
+（実行時）
+[ゲームのフォルダ]
+ |
+ +- nscr2.exe
+ |
+ +- 00.ns2
+
+これで、nscr2.exeは"system.lua" "root.lua" "00.txt" "01.txt" "bg/school.png" "sound/se00.ogg" を読み込める。
+</code></pre>
+</p>
+<li><strong>連番JPEGをα値無しのNMV形式に変換（高速）</strong>
+<p>連番JPEGファイルからα値無しのNMV形式に変換します。とても高速に変換が終わります。イベント絵アニメーションなどで透過する必要がない場合はこれで作ると速いでしょう。JPEGの画質はそのままになります（連結してるだけなので）</p>
+<li><strong>連番PNGをα値付きNMV形式に変換</strong>
+<p>連番PNGファイルからNMVファイルに変換します。透過度を反映します。</p>
+<li><strong>連番PNGをα値無しのNMV形式に変換</strong>
+<p>連番PNGファイルからNMVファイルに変換します。透過度を無視します。その他は上と同じです。</p>
+</ol>
+<p><a href="index.html">目次に戻る</a></p>
+</body>
+</html>

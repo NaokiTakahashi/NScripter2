@@ -1,0 +1,506 @@
+;------------------------------------------------------------
+; システムサンプル(ADV形式)
+;------------------------------------------------------------
+; 00.txtはシステム記述に使っています。ゲーム本編は01.txtから書いていってください。
+; できるだけ小さいものを提供するために、機能は敢えて最小限にしてあります。
+; 文字列スプライトを画像に入れ替えてみたり、立ち絵アニメーション命令を充実させたり、
+; システム機能を追加したり、bgv機能を取り入れてみたり、いろいろやってみてください。
+
+
+@start
+gosub @system_initialize ; 初期設定
+goto @scenario_start ; ユーザースクリプトの実行
+
+;-------------------------------
+; ウィンドウ読み込み
+;-------------------------------
+@load_window
+spset "window",100
+spsetvisible "window",0 ; ユーザーがwindow命令を使うか何か表示文を実行するまでは非表示にしておく。
+sp "window:bg",{name="*850,220,#BB111144",x=87,y=540,z=1000}      ; ウィンドウ背景
+sp "window:name",{name="*160,35,#BB111144",x=87,y=500,z=1000}     ; 名前欄の背景
+sp "window:text",{name="*830,200,#00000000",x=91,y=550,z=900}     ; テキスト文字用
+sp "window:erase", {name={"?[ERASE ],sysfont0","?[ERASE ],sysfont1"},x=847,y=550,z=100};
+sp "window:skip",  {name={"?[SKIP  ],sysfont0","?[SKIP  ],sysfont1"},x=847,y=580,z=100};
+sp "window:auto",  {name={"?[AUTO  ],sysfont0","?[AUTO  ],sysfont1"},x=847,y=610,z=100};
+sp "window:save",  {name={"?[SAVE  ],sysfont0","?[SAVE  ],sysfont1"},x=847,y=640,z=100};
+sp "window:load",  {name={"?[LOAD  ],sysfont0","?[LOAD  ],sysfont1"},x=847,y=670,z=100};
+sp "window:log",   {name={"?[LOG   ],sysfont0","?[LOG   ],sysfont1"},x=847,y=700,z=100};
+sp "window:config",{name={"?[CONFIG],sysfont0","?[CONFIG],sysfont1"},x=847,y=730,z=100};
+return
+
+;-------------------------------
+; 表示文処理
+;-------------------------------
+@text
+param %tag,%text
+spsetvisible "window",1 ; ウィンドウが非表示なら表示状態にする。
+split %tag,"/",%name,%voice ; タグを名前とボイスに分割
+if %name=="" then
+	spdelete "window:nametext" ; 名前タグのテキストを消す
+else
+	sp "window:nametext",{name="?"+%name+",text",x=92,y=503,z=900} ; 名前タグのテキストをロード
+end if
+if %voice=="" then
+	voiceplay "" ;ボイスを止める
+else
+	if getskip()<>1 then
+		voiceplay "voice\"+%voice+".ogg" ;スキップ時以外はボイスを再生
+		;私はCTRL時はボイスを鳴らすように作ることにしています（ボイスファイルチェックに便利なので）。
+	end if
+end if
+spputtext "window:text",0,%text,{font="text",wait=(6-_textspeed)*10,w=27,h=4},{font="ruby"}
+return
+
+@textb
+param %c_x,%c_y ; テキストのカーソル位置。クリック待ちボタンを出すときに使う。ここでは使わない。
+btnclear "window"
+btn "window:erase"
+btn "window:skip"
+btn "window:auto"
+btn "window:save"
+btn "window:load"
+btn "window:log"
+btn "window:config"
+
+@textb_loop
+if getskip()==1 then return
+if getskip()==2 then
+	btnexec %ret,"window",{wheel=1,ctrl=1,automode=1,time=(6-_autospeed)*500}
+else
+	btnexec %ret,"window",{wheel=1,ctrl=1}
+end if
+if %ret=="" or %ret==#wd or %ret==#ctrl or %ret==#timeout then return
+if %ret=="erase" or %ret==#r then spsetvisible "window",0:lrclick:spsetvisible "window",1:goto @textb_loop
+if %ret=="skip" then skip 1:goto @textb_loop
+if %ret=="auto" then skip 2:goto @textb_loop
+if %ret=="save" then spsetvisible "window",0:issave=1:gosub @saveload:spsetvisible "window",1:goto @textb_loop
+if %ret=="load" then spsetvisible "window",0:issave=0:gosub @saveload:spsetvisible "window",1:goto @textb_loop
+if %ret=="log" or %ret==#wu then spsetvisible "window",0:gosub @backlog:spsetvisible "window",1:print #c:goto @textb_loop
+if %ret=="config" then spsetvisible "window",0:gosub @config:spsetvisible "window",1:goto @textb_loop
+goto @textb_loop
+return
+
+;-------------------------------
+; 選択肢処理
+;-------------------------------
+@selectb
+;最大選択肢数に合わせて受け取る変数を書いておく。とりあえず４つにしておきます。
+param %cnum,%text0,%lb0,%text1,%lb1,%text2,%lb2,%text3,%lb3
+skip 0
+;スプライトのロード
+sp "window:selwin0",{name={"*850,35,#BB111144","*850,35,#BB3333AA"},x=87,y=200,z=10}
+sp "window:seltext0",{name="?"+%text0+",text",x=97,y=205,z=0}
+sp "window:selwin1",{name={"*850,35,#BB111144","*850,35,#BB3333AA"},x=87,y=280,z=10}
+sp "window:seltext1",{name="?"+%text1+",text",x=97,y=285,z=0}
+if %cnum>2 then
+	sp "window:selwin2",{name={"*850,35,#BB111144","*850,35,#BB3333AA"},x=87,y=360,z=10}
+	sp "window:seltext2",{name="?"+%text2+",text",x=97,y=365,z=0}
+end if
+if %cnum>3 then
+	sp "window:selwin3",{name={"*850,35,#BB111144","*850,35,#BB3333AA"},x=87,y=440,z=10}
+	sp "window:seltext3",{name="?"+%text3+",text",x=97,y=445,z=0}
+end if
+@sel_start
+btnclear "window"
+btn "window:selwin0"
+btn "window:selwin1"
+btn "window:selwin2"
+btn "window:selwin3"
+btn "window:erase"
+btn "window:save"
+btn "window:load"
+btn "window:log"
+btn "window:config"
+@sel_loop
+btnexec %ret,"window",{wheel=1}
+if %ret=="selwin0" then spdeletes "window:sel":print #c:return %lb0
+if %ret=="selwin1" then spdeletes "window:sel":print #c:return %lb1
+if %ret=="selwin2" then spdeletes "window:sel":print #c:return %lb2
+if %ret=="selwin3" then spdeletes "window:sel":print #c:return %lb3
+if %ret=="erase" or %ret==#r then spsetvisible "window",0:lrclick:spsetvisible "window",1:goto @sel_loop
+if %ret=="save" then spsetvisible "window",0:issave=1:gosub @saveload:spsetvisible "window",1:goto @sel_loop
+if %ret=="load" then spsetvisible "window",0:issave=0:gosub @saveload:spsetvisible "window",1:goto @sel_loop
+if %ret=="log" or %ret==#wu then spsetvisible "window",0:gosub @backlog:spsetvisible "window",1:print #c:goto @sel_loop
+if %ret=="config" then spsetvisible "window",0:gosub @config:spsetvisible "window",1:goto @sel_loop
+goto @sel_loop
+
+;-------------------------------
+; セーブ／ロード
+;-------------------------------
+@saveload
+;セーブとロードは共通の処理が多いので変数で切り分けて書いています。
+spset "sl",100
+sp "sl:bg",{name="*#BB111144",x=0,y=0,z=1000}
+if issave==1 then
+	sp "sl:title",{name="?＜　セーブ　＞,menu1",x=410,y=50,z=0}
+else
+	sp "sl:title",{name="?＜　ロード　＞,menu1",x=410,y=50,z=0}
+end if
+
+@saveload_btnload
+btnclear "sl"
+for %i=0 to 20
+	call @saveload_sub,"N",%i
+	if issave==1 or schk(%i) then btn "sl:data"+str(%i)
+next
+
+@saveload_loop
+btnexec %ret,"sl"
+if %ret==#r then spsetdelete "sl":return
+if left(%ret,4)=="data" then goto @saveload_exec
+goto @saveload_loop
+
+@saveload_exec
+%num=num(mid(%ret,4,100))
+if issave==1 then
+	if schk(%num) then
+		yesnobox %ret,"セーブデータが既に存在します。上書きしますか？","上書き確認"
+		if %ret==0 then goto @saveload_loop
+	end if
+	save %num
+	goto @saveload_btnload
+else
+	yesnobox %ret,"ロードしますか？","ロード確認"
+	if %ret==1 then load %num else goto @saveload_loop
+end if
+
+@saveload_sub
+param %i
+if schk(%i)==1 then
+	savetime %i,%year,%month,%day,%hour,%min,%sec
+	%str="?"+strf("%4d",%year)+"/"+strf("%02d",%month)+"/"+strf("%02d",%day)+" "+strf("%02d",%hour)+":"+strf("%02d",%min)+":"+strf("%02d",%sec)
+	sp "sl:data"+str(%i),{name={%str+",save0",%str+",save1"},x=320,y=90+%i*30,z=0}
+else
+	sp "sl:data"+str(%i),{name={"?----/--/-- --:--:--,save0","?----/--/-- --:--:--,save1"},x=320,y=90+%i*30,z=0}
+end if
+return
+
+;-------------------------------
+; バックログ
+;-------------------------------
+@backlog
+spset "log",100
+sp "log:bg",{name="*#BB111144",x=0,y=0,z=1000}
+sp "log:up",{name={"?▲,menu0","?▲,menu1"},x=900,y=340,z=0}
+sp "log:down",{name={"?▼,menu0","?▼,menu1"},x=900,y=390,z=0}
+%page=0
+@backlog_pageload
+btnclear
+call @backlog_pagestart_sub,"SNN","text5",%page+4,10
+call @backlog_pagestart_sub,"SNN","text4",%page+3,160
+call @backlog_pagestart_sub,"SNN","text3",%page+2,310
+call @backlog_pagestart_sub,"SNN","text2",%page+1,460
+call @backlog_pagestart_sub,"SNN","text1",%page  ,610
+print #c
+btn "log:up"
+btn "log:down"
+
+@backlog_loop
+btnexec %ret,"log",{spcret=1,wheel=1}
+if %ret==#r or %ret=="" then goto @backlog_end
+if %ret==#wu or %ret=="up" then goto @backlog_up
+if %ret==#wd or %ret=="down" then goto @backlog_down
+if %ret=="text5" then call @backlog_voice,"N",%page+4:goto @backlog_loop
+if %ret=="text4" then call @backlog_voice,"N",%page+3:goto @backlog_loop
+if %ret=="text3" then call @backlog_voice,"N",%page+2:goto @backlog_loop
+if %ret=="text2" then call @backlog_voice,"N",%page+1:goto @backlog_loop
+if %ret=="text1" then call @backlog_voice,"N",%page:goto @backlog_loop
+goto @backlog_loop
+
+@backlog_up
+%page=%page+1
+if logchk(%page+4)==0 then %page=%page-1
+goto @backlog_pageload
+
+@backlog_down
+%page=%page-1
+if %page<0 then goto @backlog_end
+goto @backlog_pageload
+
+@backlog_end
+spsetdelete "log"
+return
+
+@backlog_pagestart_sub
+param %name,%num,%y
+getlogtext %num,%vtag,%vtext
+if %vtext==#NIL then spdelete "log:"+%name:return
+split %vtag,"/",%vname,%vvoice
+if %vname<>"" then
+	%vtext="【" + %vname + "】\n" + %vtext
+end if
+if %vvoice<>"" then
+	sp "log:"+%name,{name={"*730,150,#00000000","*730,150,#00000000"},x=180,y=%y,z=30}
+	spformat "log:"+%name,0,%vtext,{font="logtext0",x=0,y=0,w=27,h=5},{font="logruby0"}
+	spformat "log:"+%name,1,%vtext,{font="logtext1",x=0,y=0,w=27,h=5},{font="logruby1"}
+	btn "log:"+%name
+else
+	sp "log:"+%name,{name="*730,150,#00000000",x=180,y=%y,z=30}
+	spformat "log:"+%name,0,%vtext,{font="logtext0",x=0,y=12,w=27,h=5},{font="logruby0"}
+end if
+return
+
+@backlog_voice
+param %num
+getlogtext %num,%vtag,%vtext
+split %vtag,"/",%vname,%vvoice
+voiceplay "voice\"+%vvoice+".ogg"
+return
+
+;-------------------------------
+; コンフィグ
+;-------------------------------
+@config
+spset "cfg",100
+sp "cfg:bg",{name="*#BB111144",x=0,y=0,z=1000}
+sp "cfg:title_top",{name="?＜コンフィグメニュー＞,menu1",x=350,y=150,z=10}
+sp "cfg:title0",{name="?画面モード　　　,menu1",x=170,y=240,z=10}
+sp "cfg:title1",{name="?テキスト表示速度,menu1",x=170,y=280,z=10}
+sp "cfg:title2",{name="?オートモード速度,menu1",x=170,y=320,z=10}
+sp "cfg:title3",{name="?ＢＧＭ音量　　　,menu1",x=170,y=360,z=10}
+sp "cfg:title4",{name="?ボイス音量　　　,menu1",x=170,y=400,z=10}
+sp "cfg:title5",{name="?ＳＥ音量　　　　,menu1",x=170,y=440,z=10}
+sp "cfg:title6",{name={"?リセットする,menu0","?リセットする,menu1"},x=170,y=480,z=10}
+sp "cfg:title7",{name={"?終了する,menu0","?終了する,menu1"},x=170,y=520,z=10}
+@config_btnload
+btnclear "cfg"
+
+;スクリーンモードはAlt+ENTERや最大化ボタンでも変化します。必ず、状態をチェックして対応してください。
+if getscreen()==0 then
+	sp "cfg:window",{name="?ウィンドウ,menu1",x=450,y=240,z=10}
+	sp "cfg:full",{name={"?フルスクリーン,menu0","?フルスクリーン,menu1"},x=620,y=240,z=10}
+	btn "cfg:full"
+else
+	sp "cfg:window",{name={"?ウィンドウ,menu0","?ウィンドウ,menu1"},x=450,y=240,z=10}
+	sp "cfg:full",{name="?フルスクリーン,menu1",x=620,y=240,z=10}
+	btn "cfg:window"
+end if
+
+for %i=0 to 6
+	;０－６の各ボタンを設定しています。
+	if _textspeed==%i then
+		sp "cfg:text"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=280,z=10}
+	else
+		%str="?"+zenkaku(str(%i))
+		sp "cfg:text"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=280,z=10}
+		btn "cfg:text"+str(%i)
+	end if
+
+	if _autospeed==%i then
+		sp "cfg:auto"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=320,z=10}
+	else
+		%str="?"+zenkaku(str(%i))
+		sp "cfg:auto"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=320,z=10}
+		btn "cfg:auto"+str(%i)
+	end if
+
+	if _bgmvol==%i then
+		sp "cfg:bgm"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=360,z=10}
+	else
+		%str="?"+zenkaku(str(%i))
+		sp "cfg:bgm"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=360,z=10}
+		btn "cfg:bgm"+str(%i)
+	end if
+
+	if _voicevol==%i then
+		sp "cfg:voice"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=400,z=10}
+	else
+		%str="?"+zenkaku(str(%i))
+		sp "cfg:voice"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=400,z=10}
+		btn "cfg:voice"+str(%i)
+	end if
+
+	if _sevol==%i then
+		sp "cfg:se"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=440,z=10}
+	else
+		%str="?"+zenkaku(str(%i))
+		sp "cfg:se"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=440,z=10}
+		btn "cfg:se"+str(%i)
+	end if
+next
+
+btn "cfg:title6"
+btn "cfg:title7"
+
+
+@config_loop
+btnexec %ret,"cfg",{sizechange=1} ; コンフィグではウィンドウサイズ変化に対応。表示に反映させます。
+if %ret=="title6" then
+	yesnobox %ret,"リセットしますか？","リセット確認"
+	if %ret==1 then reset else goto @config_loop
+end if
+if %ret=="title7" then
+	yesnobox %ret,"終了しますか？","終了確認"
+	if %ret==1 then quit else goto @config_loop
+end if
+if %ret==#r then spsetdelete "cfg":return
+if %ret=="window" then setscreen 0:goto @config_btnload
+if %ret=="full" then setscreen 1:goto @config_btnload
+if %ret==#sizechange then goto @config_btnload ; Alt+ENTERもしくは最大化ボタン対策
+if left(%ret,4)=="text" then
+	_textspeed=num(mid(%ret,4,100))
+	goto @config_btnload
+end if
+if left(%ret,4)=="auto" then
+	_autospeed=num(mid(%ret,4,100))
+	goto @config_btnload
+end if
+if left(%ret,3)=="bgm" then
+	_bgmvol=num(mid(%ret,3,100))
+	gosub @config_exec
+	goto @config_btnload
+end if
+if left(%ret,5)=="voice" then
+	_voicevol=num(mid(%ret,5,100))
+	gosub @config_exec
+	goto @config_btnload
+end if
+if left(%ret,2)=="se" then
+	_sevol=num(mid(%ret,2,100))
+	gosub @config_exec
+	goto @config_btnload
+end if
+goto @config_loop
+
+;-------------------------------
+; コンフィグ設定の実行
+;-------------------------------
+@config_exec
+;ボリューム0は無音(-10000)、あとは計算式で微調整している。0が最大ボリュームなので、6で0に。
+if _bgmvol==0 then bgmvolume -10000 else bgmvolume -2400+_bgmvol*400
+if _voicevol==0 then voicevolume -10000 else voicevolume -2400+_voicevol*400
+if _sevol==0 then sevolume -10000 else sevolume -2400+_sevol*400
+return
+
+;-------------------------------
+; 初期化ルーチン
+;-------------------------------
+@system_initialize
+if not isdef(_first) then gosub @first_settings
+gosub @config_exec
+gosub @define_commands
+gosub @define_font
+gosub @load_window
+return
+
+;-------------------------------
+;初回起動時のシステム変数設定
+;-------------------------------
+@first_settings
+_first=1
+_textspeed=3        ;テキストの速度(0-6)
+_autospeed=3        ;オートモードの速度(0-6)
+_bgmvol=6           ;BGMのボリューム(0-6)
+_voicevol=6         ;VOICEのボリューム(0-6)
+_sevol=6            ;SEのボリューム(0-6)
+return
+
+;-------------------------------
+; フォント定義
+;-------------------------------
+;フォントはセーブされないので、必ず起動時に一回だけ初期化する。
+@define_font
+font "text",{width=28,height=28,color=#FFFFFFFF}
+font "ruby",{width=14,height=14,color=#FFFFFFFF}
+font "logtext0",{width=25,height=25,color=#FFFFFF22}
+font "logruby0",{width=12,height=12,color=#FFFFFF22}
+font "logtext1",{width=25,height=25,color=#FFFFFFFF}
+font "logruby1",{width=12,height=12,color=#FFFFFFFF}
+font "menu0",{width=28,height=28,color=#FFBB6666}
+font "menu1",{width=28,height=28,color=#FFFFFFFF}
+font "save0",{width=20,height=20,color=#FFBB6666}
+font "save1",{width=20,height=20,color=#FFFFFFFF}
+font "sysfont0",{width=11,height=23,color=#FFAAFFFF}
+font "sysfont1",{width=11,height=23,color=#FFFFFFFF}
+return
+
+;-------------------------------
+; 演出コマンド定義
+;-------------------------------
+;演出命令は全部自分で組まなければなりませんが、仕様は自由にできます。
+;例）音楽等は、たとえばbgm 数値 などというような命令を作ると楽でしょう。
+
+@define_commands
+defsub  bg0, "S"       ; bg0 "filename"
+defsub   bg, "SS?N?S"  ; bg "filename",#エフェクト[,時間,ルール画像]
+defsub  ld0, "NS"      ; ld0 pos,"filename"
+defsub   ld, "NSS?N?S" ; ld pos,"filename",#エフェクト[,時間,ルール画像]
+defsub  cl0, "N"       ; cl0 pos
+defsub   cl, "NS?N?S"  ; cl pos,#エフェクト[,時間,ルール画像]
+defsub cla0, ""        ; cla0
+defsub  cla, "S?N?S"   ; cla #エフェクト[,時間,ルール画像]
+defsub window,"N"      ; 0=テキストウィンドウ非表示 1=テキストウィンドウ表示
+return
+
+;-------------------------------
+; 演出コマンド実装
+;-------------------------------
+@bg
+;背景ロード、エフェクト
+param %fn,%ef,%tm,%rule
+spdeletes "chr" ; chrで始まるスプライト、つまり立ち絵を全部消す
+bg0 %fn
+print %ef,%tm,%rule
+return
+
+@bg0
+;背景ロード（表示はまだしない。あとでまとめてprintで表示できる）
+param %fn
+sp "bg",{name=%fn,x=0,y=0,z=1000}
+return
+
+@ld
+;立ち絵ロード、エフェクト。
+;posは-1が左、0が真ん中、1が右
+param %pos,%fn,%ef,%tm,%rule
+ld0 %pos,%fn
+print %ef,%tm,%rule
+return
+
+@ld0
+;立ち絵ロード（表示はまだしない。あとでまとめてprintで表示できる）
+;posは-1が左、0が真ん中、1が右
+param %pos,%fn
+%spname="chr"+str(%pos)
+ggetsize %w,%h ; ゲーム画面の大きさを取得
+sp %spname,{name=%fn,x=%w,y=%h} ;画面外へロード
+getspinfo %spname,%info ;画像の情報を取得
+if %pos==-1 then %x=floor(%w/3-%info.w/2)
+if %pos==0 then %x=floor(%w/2-%info.w/2)
+if %pos==1 then %x=floor(%w*2/3-%info.w/2)
+%y=%h-%info.h
+spmove %spname,%x,%y
+return
+
+@cl
+;立ち絵消去、エフェクト
+param %pos,%ef,%tm,%rule
+cl0 %pos
+print %ef,%tm,%rule
+return
+
+@cl0
+;立ち絵消去（表示はまだしない。あとでまとめてprintで表示できる）
+param %pos
+spdelete "chr"+str(%pos)
+return
+
+@cla
+;立ち絵を全部消す、エフェクト
+param %ef,%tm,%rule
+cla0
+print %ef,%tm,%rule
+return
+
+@cla0
+;立ち絵を全部消す
+spdeletes "chr"
+return
+
+@window
+;テキストウィンドウの表示・非表示を切り替える
+param %flag
+if %flag==0 then spvisible "window",0 else spvisible "window",1
+print #c
+return

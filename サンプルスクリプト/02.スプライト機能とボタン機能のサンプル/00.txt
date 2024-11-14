@@ -1,0 +1,73 @@
+@start
+font "text1",{width=28,height=28,color=#FFFFFFFF}
+font "text2",{width=28,height=28,style="shadow",color=#FFFFFFFF,shadowcolor=#FF0000FF}
+font "text3",{width=28,height=28,style="outline",color=#FF000000,outlinecolor=#FFFFFFFF}
+font "text4",{width=28,height=28,style="fancy",color1=#FFFF4444,color2=#FFFFFFFF,outlinecolor=#FFFFFF00}
+
+;これはスプライト／ボタン機能のサンプルです。
+;1.スプライトのロード　通常のスプライト　文字列スプライト
+spset "set1",100
+spset "set2",200
+sp "set1:sp1",{name={"sp\00.png","sp\01.png","sp\02.png","sp\03.png"},animtime=1000,animtype="normal",x=100,y=100,z=0}
+sp "set1:sp2",{name={"sp\00.png","sp\01.png","sp\02.png","sp\03.png"},animtime=1000,animtype="round",x=200,y=200,z=0}
+sp "set2:sp3",{name="?文字列スプライト１,text1",x=300,y=300,z=0}
+sp "set2:sp4",{name="?文字列スプライト２,text2",x=300,y=400,z=0}
+sp "set2:sp5",{name="?文字列スプライト３,text3",x=300,y=500,z=0}
+sp "set2:sp6",{name="?文字列スプライト４,text4",x=300,y=600,z=0}
+print #f,500
+click
+;2.スプライトの表示／非表示切り替え、移動
+spvisible "set1:sp1",0
+print #c
+click
+spvisible "set1:sp1",1
+print #c
+click
+spvisible "set1:sp2",0
+print #c
+click
+spvisible "set1:sp2",1
+print #c
+click
+spsetvisible "set1",0
+print #c
+click
+spsetvisible "set1",1
+print #c
+click
+spsetvisible "set2",0
+print #c
+click
+spsetvisible "set2",1
+print #c
+click
+spsetdelete "set1"
+spsetdelete "set2"
+print #f,500
+;3.ムービーテクスチャの使い方
+sp "bg",{name="*g#FFFFFF00,#FF00FFFF,1,1",x=0,y=0,z=1000}
+sp "mov",{name=":movieloopalpha(sp\test.nmv)",x=200,y=200,z=0}
+print #c
+click
+spdelete "bg"
+spdelete "mov"
+print #f,500
+
+;4.ボタン処理
+spset "set1",100
+sp "set1:sp1",{name={"sp\00.png","sp\01.png"},x=100,y=100,z=0}
+sp "set1:sp2",{name={"sp\02.png","sp\03.png"},x=100,y=200,z=0}
+sp "set1:sp3",{name={"sp\00.png","sp\01.png"},x=100,y=300,z=0}
+sp "set1:sp4",{name={"sp\02.png","sp\03.png"},x=100,y=400,z=0}
+sp "set1:sp5",{name={"sp\00.png","sp\01.png"},x=300,y=100,z=0}
+
+btnclear "set1"
+btn "set1:sp1"
+btn "set1:sp2"
+btn "set1:sp3"
+btn "set1:sp4",{on="P(set1:sp5,1)",off="P(set1:sp5,0)"} ; ボタン文字列の使用例
+
+@lp
+btnexec %ret,"set1"
+okbox %ret,"戻り値"
+goto @lp

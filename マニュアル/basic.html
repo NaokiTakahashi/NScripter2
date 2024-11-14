@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>basic</title>
+<link href="nscripter.css" rel="stylesheet" type="text/css">
+</head>
+<body><h1>BASIC解説</h1>
+<p>おおむねVisual BasicやQuick Basic系を参考にしています。ラベルの仕様等はプチコンのBASICも参考にしています。BASICは大文字と小文字を区別しませんが、文字列の中身は区別されます。また、テーブル記法の際にも大文字小文字は区別されます。<br>BASICはまず最初に<strong>@start</strong>ラベルへジャンプし、そこから順番に実行されます。<br><a name="top"></a></p>
+<a name="top"></a>
+<h2>BASICマニュアル目次</h2>
+<p> <a href="index.html">全体の目次に戻る</a></p>
+<a name="top00"></a>
+<h3>基本構文</h3>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<TD width=33%>
+<UL>
+<LI><A HREF="#p00_00">コメント文とマルチステートメント</a>
+<LI><A HREF="#p00_01">ラベル文</a>
+<LI><A HREF="#p00_02">表示文</a>
+<LI><A HREF="#p00_03">goto文</a>
+<LI><A HREF="#p00_04">gosub文とreturn文</a>
+<LI><A HREF="#p00_05">if then else endif文</a>
+</UL>
+<TD width=33%>
+<UL>
+<LI><A HREF="#p00_06">for next文</a>
+<LI><A HREF="#p00_07">do loop文</a>
+<LI><A HREF="#p00_08">exit文とcontinue文</a>
+<LI><A HREF="#p00_09">変数と代入文、未定義変数の扱い</a>
+<LI><A HREF="#p00_10">シンボル、色指定、テーブル記法</a>
+<LI><A HREF="#p00_11">配列と構造体</a>
+</UL>
+<TD width=33%>
+<UL>
+<LI><A HREF="#p00_12">演算子</a>
+<LI><A HREF="#p00_13">命令と関数</a>
+<LI><A HREF="#p00_14">defsubによるユーザー命令定義</a>
+<LI><A HREF="#p00_15">画像ファイル名指定について</a>
+</UL>
+</TR>
+</TABLE>
+<a name="top01"></a>
+<h3>実行制御</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#c01_01">quit</A>
+<li><A HREF="#c01_02">select</A>
+<li><A HREF="#c01_03">skip</A>
+<li><A HREF="#c01_04">trap</A>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c01_05">defsub</A>
+<li><A HREF="#c01_06">param</A>
+<li><A HREF="#c01_07">vset</A>
+<li><A HREF="#c01_08">call</A>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c01_09">exec</A>
+<li><A HREF="#c01_10">getlogtext</A>
+<li><A HREF="#c01_11">novelmode</A>
+</ul>
+</table>
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#f01_01">getskip</A>
+<li><A HREF="#f01_02">logchk</A>
+<li><A HREF="#f01_03">getconfig</A>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#f01_04">vget</a>
+<li><A HREF="#f01_05">getversion</a>
+</ul>
+<td width=33%>
+</table>
+<a name="top01_"></a>
+<h3>実効制御（ノベルモード専用）</h4>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c01_50">newpage</a>
+<li><A HREF="#c01_51">gettextpos</a>
+<li><A HREF="#c01_52">skippause</a>
+</ul>
+<td width=33%>
+<td width=33%>
+</table>
+<a name="top02"></a>
+<h3>GUI処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#c02_01">setscreen</A>
+<li><A HREF="#c02_02">shell</A>
+<li><A HREF="#c02_03">caption</A>
+<li><A HREF="#c02_04">setmouse</A>
+<li><A HREF="#c02_05">clearmouse</A>
+<li><A HREF="#c02_06">getclick</A>
+<li><A HREF="#c02_07">getmouse</A>
+<li><A HREF="#c02_08">doevents</A>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c02_09">sleep</A>
+<li><A HREF="#c02_10">clearmessage</A>
+<li><A HREF="#c02_11">okbox</A>
+<li><A HREF="#c02_12">yesnobox</A>
+<li><A HREF="#c02_13">input</A>
+<li><A HREF="#c02_14">resettimer</A>
+<li><A HREF="#c02_15">waittimer</A>
+<li><A HREF="#c02_16">time</A></ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c02_17">beep</A>
+<li><A HREF="#c02_18">gbegin</A>
+<li><A HREF="#c02_19">gend</A>
+<li><A HREF="#c02_20">gblend</A>
+<li><A HREF="#c02_21">getpad</A>
+<li><A HREF="#c02_22">ggetsize</A>
+</ul>
+</table>
+
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#f02_01">getscreen</A>
+<li><A HREF="#f02_02">getkey</A>
+<li><A HREF="#f02_03">gettimer</A>
+</ul>
+<td  width=33%>
+<td  width=33%>
+</table>
+<a name="top03"></a>
+<h3>コンソール処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#c03_01">copen</a>
+<li><A HREF="#c03_02">cclose</a>
+<li><A HREF="#c03_03">ccaption</a>
+<li><A HREF="#c03_04">cprint</a>
+<li><A HREF="#c03_05">cwrite</a>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c03_06">clocate</a>
+<li><A HREF="#c03_07">cgetsize</a>
+<li><A HREF="#c03_08">csetsize</a>
+<li><A HREF="#c03_09">cgetcursor</a>
+<li><A HREF="#c03_10">csettext</a>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c03_11">cclear</a>
+<li><A HREF="#c03_12">ccolor</a>
+<li><A HREF="#c03_13">system</a>
+</ul>
+</table>
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#f03_01">cread</a>
+<li><A HREF="#f03_02">cinkey</a>
+</ul>
+<td  width=33%>
+<td  width=33%>
+</table>
+<a name="top04"></a>
+<h3>フォント処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#c04_01">font</A>
+<li><A HREF="#c04_02">fdelete</A>
+</ul>
+<td  width=33%>
+<td  width=33%>
+</table>
+<a name="top05"></a>
+<h3>スプライト／ボタン処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#c05_01">sp</a>
+<li><A HREF="#c05_02">spdelete</a>
+<li><A HREF="#c05_03">spdeletes</a>
+<li><A HREF="#c05_04">spcell</a>
+<li><A HREF="#c05_05">spmove</a>
+<li><A HREF="#c05_06">spmovelt</a>
+<li><A HREF="#c05_07">spvisible</a>
+<li><A HREF="#c05_08">spz</a>
+<li><A HREF="#c05_09">spfill</a>
+<li><A HREF="#c05_10">spanimationreset</a>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c05_11">spset</a>
+<li><A HREF="#c05_12">spsetdelete</a>
+<li><A HREF="#c05_13">spsetclear</a>
+<li><A HREF="#c05_14">spsetz</a>
+<li><A HREF="#c05_15">spsetvisible</a>
+<li><A HREF="#c05_16">spformat</a>
+<li><A HREF="#c05_17">spputtext</a>
+<li><A HREF="#c05_18">getscreenshot</a>
+<li><A HREF="#c05_19">btnclear</a>
+<li><A HREF="#c05_20">btn</a>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c05_21">btnexec</a>
+<li><A HREF="#c05_22">btnstr</a>
+<li><A HREF="#c05_23">print</a>
+<li><A HREF="#c05_24">wait</a>
+<li><A HREF="#c05_25">click</a>
+<li><A HREF="#c05_26">lrclick</a>
+<li><A HREF="#c05_27">spdraw</a>
+<li><A HREF="#c05_28">getspinfo</a>
+</ul>
+</table>
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#f05_01">getspcell</a>
+<li><A HREF="#f05_02">sphitcheck</a>
+</ul>
+</table>
+<a name="top06"></a>
+<h3>テクスチャ処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#c06_01">tcreate</a>
+<li><A HREF="#c06_02">tload</a>
+<li><A HREF="#c06_03">tfromb</a>
+<li><A HREF="#c06_04">tdelete</a>
+<li><A HREF="#c06_05">tdraw</a>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c06_06">tdrawlt</a>
+<li><A HREF="#c06_07">tfill</a>
+<li><A HREF="#c06_08">tfrect</a>
+<li><A HREF="#c06_09">tgetsize</a>
+<li><A HREF="#c06_10">tsave</a>
+</ul>
+<td  width=33%>
+<ul>
+<li><A HREF="#c06_11">tbegin</a>
+<li><A HREF="#c06_12">tend</a>
+<li><A HREF="#c06_13">tformat</a>
+</ul>
+</table>
+
+
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td  width=33%>
+<ul>
+<li><A HREF="#f06_01">tisplaying</a>
+</ul>
+<td  width=33%>
+<td  width=33%>
+</table>
+<a name="top07"></a>
+<h3>ビットマップ処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c07_01">bcreate</a>
+<li><A HREF="#c07_02">bload</a>
+<li><A HREF="#c07_03">bfromt</a>
+<li><A HREF="#c07_04">bdelete</a>
+<li><A HREF="#c07_05">bsave</a>
+<li><A HREF="#c07_06">bfill</a>
+<li><A HREF="#c07_07">bfrect</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#c07_08">breverse</a>
+<li><A HREF="#c07_09">bresize</a>
+<li><A HREF="#c07_10">btrim</a>
+<li><A HREF="#c07_11">bjoinx</a>
+<li><A HREF="#c07_12">bjoiny</a>
+<li><A HREF="#c07_13">bgetsize</a>
+<li><A HREF="#c07_14">bdup</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#c07_15">bgradation</a>
+<li><A HREF="#c07_16">bnega</a>
+<li><A HREF="#c07_17">bmonotone</a>
+<li><A HREF="#c07_18">bbegin</a>
+<li><A HREF="#c07_19">bend</a>
+<li><A HREF="#c07_20">bformat</a>
+</ul>
+</table>
+<a name="top08"></a>
+<h3>動画処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c08_01">movie</a>
+<li><A HREF="#c08_02">mreset</a>
+</ul>
+<td width=33%>
+<td width=33%>
+</table>
+<a name="top09"></a>
+<h3>音声処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c09_01">bgmplay</a>
+<li><A HREF="#c09_02">bgmplayonce</a>
+<li><A HREF="#c09_03">bgmstop</a>
+<li><A HREF="#c09_04">bgmfadeout</a>
+<li><A HREF="#c09_05">bgmvolume</a>
+<li><A HREF="#c09_06">seplay</a>
+<li><A HREF="#c09_07">seloop</a>
+<li><A HREF="#c09_08">sestop</a>
+<li><A HREF="#c09_09">sestopall</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#c09_10">sefadeout</a>
+<li><A HREF="#c09_11">sevolume</a>
+<li><A HREF="#c09_12">sechvolume</a>
+<li><A HREF="#c09_13">voiceplay</a>
+<li><A HREF="#c09_14">voicewait</a>
+<li><A HREF="#c09_15">voicevolume</a>
+<li><A HREF="#c09_16">bgvplay</a>
+<li><A HREF="#c09_17">bgvfadeout</a>
+<li><A HREF="#c09_18">bgvvolume</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#c09_19">sound</a>
+<li><A HREF="#c09_20">sdelete</a>
+<li><A HREF="#c09_21">splay</a>
+<li><A HREF="#c09_22">sstop</a>
+<li><A HREF="#c09_23">svolume</a>
+<li><A HREF="#c09_24">span</a>
+<li><A HREF="#c09_25">sfadeout</a>
+<li><A HREF="#c09_26">spause</a>
+<li><A HREF="#c09_27">sresume</a>
+</ul>
+</table>
+
+
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#f09_01">getbgmvolume</a>
+<li><A HREF="#f09_02">getsevolume</a>
+<li><A HREF="#f09_03">getvoicevolume</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#f09_04">getbgvvolume</a>
+<li><A HREF="#f09_05">sisplaying</a>
+</ul>
+<td width=33%>
+</table>
+<a name="top10"></a>
+<h3>演出処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c10_01">transition</a>
+<li><A HREF="#c10_02">quake</a>
+<td width=33%>
+<td width=33%>
+</table>
+<a name="top11"></a>
+<h3>セーブ／ロード／ファイル処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c11_01">save</a>
+<li><A HREF="#c11_02">load</a>
+<li><A HREF="#c11_03">savepoint</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#c11_04">savemode</a>
+<li><A HREF="#c11_05">filetime</a>
+<li><A HREF="#c11_06">savetime</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#c11_07">linsert</a>
+<li><A HREF="#c11_08">finsert</a>
+<li><A HREF="#c11_09">strsave</a>
+</ul>
+</table>
+
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#f11_01">lchk</a>
+<li><A HREF="#f11_02">schk</a>
+<li><A HREF="#f11_03">tchk</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#f11_04">filechk</a>
+<li><A HREF="#f11_05">fchk</a>
+<li><A HREF="#f11_06">strload</a>
+</ul>
+<td width=33%>
+</table>
+<a name="top12"></a>
+<h3>変数の変換・配列・文字列処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c12_01">split</a>
+<li><A HREF="#c12_02">splita</a>
+<li><A HREF="#c12_03">vclear</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#c12_04">vcopy</a>
+</ul>
+<td width=33%>
+</table>
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#f12_01">isdef</a>
+<li><A HREF="#f12_02">num</a>
+<li><A HREF="#f12_03">str</a>
+<li><A HREF="#f12_04">asc</a>
+<li><A HREF="#f12_05">chr</a>
+<li><A HREF="#f12_06">strf</a>
+<li><A HREF="#f12_07">type</a>
+<li><A HREF="#f12_08">replace</a>
+<li><A HREF="#f12_09">left</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#f12_10">right</a>
+<li><A HREF="#f12_11">mid</a>
+<li><A HREF="#f12_12">trim</a>
+<li><A HREF="#f12_13">ltrim</a>
+<li><A HREF="#f12_14">rtrim</a>
+<li><A HREF="#f12_15">len</a>
+<li><A HREF="#f12_16">zlen</a>
+<li><A HREF="#f12_17">lcase</a>
+<li><A HREF="#f12_18">ucase</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#f12_19">zenkaku</a>
+<li><A HREF="#f12_20">join</a>
+<li><A HREF="#f12_21">joina</a>
+<li><A HREF="#f12_22">search</a>
+<li><A HREF="#f12_23">regex_replace</a>
+<li><A HREF="#f12_24">vlen</a>
+<li><A HREF="#f12_25">vubound</a>
+<li><A HREF="#f12_26">vlbound</a>
+</ul>
+</table>
+<a name="top13"></a>
+<h3>数学処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c13_01">randomseed</a>
+</ul>
+<td width=33%>
+<td width=33%>
+</table>
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#f13_01">pi</a>
+<li><A HREF="#f13_02">sin</a>
+<li><A HREF="#f13_03">sinh</a>
+<li><A HREF="#f13_04">cos</a>
+<li><A HREF="#f13_05">cosh</a>
+<li><A HREF="#f13_06">tan</a>
+<li><A HREF="#f13_07">tanh</a>
+<li><A HREF="#f13_08">asin</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#f13_09">acos</a>
+<li><A HREF="#f13_10">atan</a>
+<li><A HREF="#f13_11">atan2</a>
+<li><A HREF="#f13_12">random</a>
+<li><A HREF="#f13_13">exp</a>
+<li><A HREF="#f13_14">log</a>
+<li><A HREF="#f13_15">log10</a>
+<li><A HREF="#f13_16">rad</a>
+</ul>
+<td width=33%>
+<ul>
+<li><A HREF="#f13_17">deg</a>
+<li><A HREF="#f13_18">sqrt</a>
+<li><A HREF="#f13_19">floor</a>
+<li><A HREF="#f13_20">ceil</a>
+<li><A HREF="#f13_21">abs</a>
+<li><A HREF="#f13_22">sgn</a>
+</ul>
+</table>
+<a name="top14"></a>
+<h3>その他の処理</h3>
+<h4>命令</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#c14_01">lua</a>
+<li><A HREF="#c14_02">luafile</a>
+<li><A HREF="#c14_03">setclipboard</a>
+</ul>
+<td width=33%>
+<td width=33%>
+</table>
+
+<h4>関数</h4>
+<table width=100%>
+<TR ALIGN="LEFT" VALIGN="TOP">
+<td width=33%>
+<ul>
+<li><A HREF="#f14_01">luaf</a>
+</ul>
+<td width=33%>
+<td width=33%>
+</table>
+<p><a href="#top">目次に戻る</a></p>
+
+<h2>BASIC解説(ドキュメント)</h1>
+<DL>
+<h3>基本構文</h3>
+<A name="p00_00"></A>
+<dt>コメント文とマルチステートメント
+<dd>
+;で始まる行はコメント文です。読み飛ばされます。  <br>
+BASICは原則的に一行一命令ですが、:（コロン記号）でつなぐと、一行に複数命令を書くことが出来ます。<br>
+<pre><code>
+; コメント文です。
+;原則一行一命令ですが、
+a=1
+b=1
+;このように書くことも出来ます。
+a=1:b=1
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_01"></A>
+<dt>ラベル文
+<dd>
+@で始まる行はラベル文になります。goto文gosub文defsub定義命令などの飛び先になります。  <br>
+ラベル名に使えるのは英文字と数字とアンダーバーです。ただし、一文字目を数字にすることは出来ません。  <br>
+なお、飛び先として指定する@labelは、内部的には文字列"@label"と等価です。goto文等の飛び先に文字列変数を使う事が出来ます。<br>
+<pre><code>
+@start ;このラベルから実行が始まります。
+@label
+@label2
+
+;ダメな例
+@2_ban ; 無効なラベル名
+@あいうえお ; 日本語も使えません。
+@label ;上で同じラベルが定義されているため二重定義はエラーになります。
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_02"></A>
+<dt>表示文
+<dd>
+英文字でも@でも;でもない文字で始まる行は表示文になります。<br>
+英文を表示したい場合のために、&gt;で始まる行も表示文として解釈されます（一文字目に>自体を表示したい場合は&gt;&gt;としてください）。<br>
+表示文中に「特殊表示文字」を使うことが出来ます。{漢字表現/日本語}でルビを振ることが出来ます。\pでページ途中の入力待ち、\nで改行することが出来ます。<br>
+表示文末には通常自動\pが補われますが、（アンダーバー）で終わっている場合は自動でのクリック待ちはしません。<br>
+内部的には、表示文は<strong>@text</strong>や<strong>@textb</strong>へのサブルーチンコールとして処理されます。詳しくはサンプルを参照して下さい。<br>
+本文の前に[]で囲まれた文字列は「タグ」となります。例えば名前欄のテキストやボイスデータの指定などに使います。これは、省略された場合は""になります。<br>
+<pre><code>
+;次のふたつはどちらも表示文になります。
+これはペンです。
+> This is a pen.
+;特殊表示文字の例です。
+ここで改行\nされます。
+ルビの例です。{天翔龍閃/あまかけるりゅうのひらめき}。
+[タグ]タグのある表示文の例です。
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_03"></A>
+<dt>goto文
+<dd>
+goto @label で指定したラベルにジャンプします。gosub（後述）と違い、行ったまま戻ってきません。また、変数のスコープ（後述）が変化することもありません。  <br>
+for文やdo loop文で書かれたループ、もしくはgosubで作られたサブルーチンをgoto文で抜けないようにして下さい(ループやサブルーチンの中でgoto文ジャンプをするのは構いません)。ループはnextや loop、サブルーチンはreturnで抜けなければなりません。<br>
+<pre><code>
+;全部同じ意味になります。
+goto @game_over
+goto "@game_over"
+next_label="@game_over"
+goto next_label
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_04"></A>
+<dt>gosub文とreturn文
+<dd>
+gosub @labelでサブルーチンをコールします。@labelから実行し、return文があると、呼び出し元に戻ってその次の命令から実行します。  <br>
+なお、defsub文で命令を定義した場合もサブルーチンコールになります。同じくreturnで呼び出し元に戻ってその次の命令から実行しますが、こちらは命令として登録されるので、パラメータを渡すことが出来ます（後述）<br>
+<pre><code>
+gosub @sub ;サブルーチンジャンプする
+.
+.
+.
+@sub
+;なんらかの処理
+return ;呼び出し元の次の命令へ戻る
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_05"></A>
+<dt>if then else endif文
+<dd>
+条件分岐を記述します。よくあるif文です。VisualBasic等と同様、一行if文と複数行if文が使えます。  <br>
+thenの後改行すれば複数行if文、改行しなければ一行if文になります。elseとelseifが使えます。スペースを空けず、elseifと書いて下さい（これで一単語です）。  
+複数行if文の場合は、elseがある場合その後も改行し、if文の終わりにはend ifもしくはendifと書いて下さい。<br>
+IF文の条件式には、計算式や比較演算子が使えます。  <br>
+<pre><code>
+; 一行IF文の例です。
+if a==1 then b=0:goto @a_eq_1 else c=0
+;複数行IF文の例です。
+if a==1 then
+  b=0
+  goto @a_eq_1
+else
+  c=0
+end if 
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_06"></A>
+<dt>for next文
+<dd>
+変数を増やしながら（もしくは減らしながら）ループを実行します。  <br>
+for 変数=初期値 to 終了値 (step 増分)でループ先頭、nextでループ終端を指定します。  <br>
+<pre><code>
+for i=1 to 10
+  cprint i
+next
+for i=10 to 1 step -1
+  cprint i
+next
+for i=1 to 1000
+  if i==10 then exit
+next
+for i=1 to 10
+  cprint i
+  if i&lt;5 then continue
+  cprint "i&gt;=5"
+next
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_07"></A>
+<dt>do loop文
+<dd>
+標準的なBASICにおけるdo loop文と同じです。ただし、until文はありません。
+<pre><code>
+i=0
+do while i&lt5
+  cprint i
+  i=i+1
+loop
+
+do
+  cprint i
+  i=i-1
+loop while i&gt0
+
+do
+  cprint "!"
+loop
+;これは無限ループします。
+
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_08"></A>
+<dt>exit文とcontinue文
+<dd>
+do loopもしくはfor nextループを途中で抜けるにはexit、ループの頭に戻るにはcontinueを使って下さい。<BR>
+なお、これらはスクリプト上のもっとも近いloopもしくはwhileの次へ抜けようとしますので、goto文でスクリプトの上でループの外に抜けてしまっていると正しく処理出来ません。処理の流れが読みにくくもなりますので、ループの中ではなるべくgoto文は使わない方がいいです。<BR>
+<pre><code>
+for i=1 to 100
+  cprint i
+  if i==5 then exit
+next
+;5まででループが終わります。
+for i=1 to 10
+  if i&lt;5 then continue
+  cprint i
+next
+;5より小さいときはcontinueでループ頭に戻るため、値が表示されません。
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_09"></A>
+<dt>変数と代入文、未定義変数の扱い
+<dd>
+変数には数値もしくは文字列を格納することが出来ます。変数には３種類あり、名前で区別されます。<br>
+先頭が_（アンダーバー）で始まる変数は「システム変数」で、これはプログラムを終了しても値が自動的に保持されます。<br>
+_でも%でもない英文字で始まる変数は「グローバル変数」で、セーブデータごとに保存され、リセットすると消去されます。<br>
+%で始まる変数は「ローカル変数」で、サブルーチンの間だけ（次のreturn文までの間）値が保持されます。return文で消去されます。gosubもしくはdefsub命令で他のサブルーチンに飛ぶと、その変数の値は保持されますが、飛んだ先からは値を参照することが出来ません。同じ名前の変数を作っても別の変数として扱われます。<br>
+ローカル変数の機能は便利ですが、初心者にはややこしいので無理に使う必要はありません（グローバル変数だけでも用は足せます）。<br>
+変数名は、一文字目が_もしくは%もしくは英文字（これで三種類に分類されます）、残りが_か英文字か数字です。<br>
+代入文は、変数名=値で書けます。値のところには式を書くことも出来ます。<br>
+値の代入されていない変数を参照（値を取り出そうとすること）すると、エラーになります。変数に値が代入されたかどうかを調べるにはisdefを使います。<br>
+<pre><code>
+（変数の例）
+hitpoint=1 ; グローバル変数
+name="太郎" ; グローバル変数
+_screenmode=1 ; システム変数
+
+
+%i=1 ;ローカル変数
+gosub @sub
+cprint %i
+system "pause"
+quit
+
+@sub
+%i=2 ; この%iは上の%iとは別の変数になります。
+cprint %i
+return
+
+</code></pre>
+
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_10"></A>
+<dt>シンボル、色指定、テーブル記法
+<dd>
+#で始まる英単語（_や数字も可）は、「シンボル」として扱われます。<br>
+シンボルは内部的には全部を大文字に変換した文字列と等価です。<br>
+命令の機能や戻り値を表現するのに使っています。たとえばボタンから帰ってくる#wu #wd #rなどです。<br>
+<pre><code>
+;シンボルの例
+#c #up #down #r #wd #wu
+;これらは大文字でも同じ意味になります。大文字に変換した文字列と等価です。つまり、次の三つは等しくなります。
+#c #C "#C"
+</code></pre>
+内部的にはシンボルなのですが、NScripter2における色指定の頭文字には#を使います。<br>
+アルファチャンネルが必要な場合はARGBの順で指定して下さい。必要ない場合はHTMLと同じです。(alpha=FF(255)の扱いになります）<br>
+<pre><code>
+;色指定の例
+#FF88BBCC ; alpha=FF R=88 G=BB B=CC
+#5588ff   ; alpha=FF R=55 G=88 B=FF
+</code></pre>
+一部の命令(spなど)は、パラメータに「テーブル記法」を要求します。<br>
+{属性名=値,属性名=値,...}という形で記述されます。配列を渡すことも出来て、その場合は、{属性名={１番目属性名=値,２番目属性名=値,...} } というような形になります。テーブル記法の中で変数や数式を使うことも出来ます。<br>
+内部的には文字列に変換され、それをLuaのテーブルとして読込ませています。<br>
+<pre><code>
+;実際に使われてる例です。{}で囲まれている部分がテーブル記法です。
+sp "window:windowframe",{name="win\wind_frame.png",x=101,y=541,z=15}
+sp "window:save",{name={"win\wb_save_off.png","win\wb_save_on.png"},x=810,y=575,z=0}
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_11"></A>
+<dt>配列と構造体
+<dd>
+変数名[添字]と書くことで配列を扱えます。<br>
+二次元配列～Ｎ次元配列も、変数名[添字1][添字2]...[添字N]と書くことで扱えます。<br>
+配列に宣言は必要ありません。ただし、値を代入されていない配列を参照するとエラーになります。<br>
+<pre><code>
+array[0]=100
+array[1]=10
+array[2]=2000
+array2d[0][0]=1
+array2d[0][1]=2
+array2d[1][0]=3
+array2d[1][1]=4
+</code></pre>
+また、変数名.メンバ名と書くことで構造体(レコード型)を扱えます。こちらも宣言は必要ありません。<br>
+<pre><code>
+info.x=100
+info.y=50
+info.c=#FFFFFFFF
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_12"></A>
+<dt>演算子
+<dd>
+実装されている演算子の一覧です。  <br>
+<pre><code>
+■算術演算子
+a+b （数値同士なら足し算、文字列同士なら連結です）
+a-b
+a*b （数値同士ならかけ算、文字列*数値の場合は反復文字列です）
+a/b （NScripter2の割り算は小数の割り算です。整数解が必要ならfloor(a/b)のようにfloor関数を使って下さい）
+a mod b （aをbで割ったあまりです。こちらは整数の、あまりの出る割り算です）
+a^b （aのb乗です。どちらも小数を指定できます。）
+■比較・論理演算子
+a>b
+a&lt;b
+a&gt;=b
+a&lt;=b
+a==b
+a&lt;&gt;b
+not a
+a and b
+a or b
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_13"></A>
+<dt>命令と関数
+<dd>
+NScripter2のBASICには「命令」と「関数」があります。<br>
+命令は、それ自体で一つの行になり（:でつなげてマルチステートメントにすることは出来ます）、何かを実行する物が多いです。<br>
+関数は、数式の中で使います。数値か文字列かどちらかを必ず返します。<br>
+<pre><code>
+resettimer ;これは命令
+i=gettimer() ;このgettimer()は関数。resettimerからの経過時間をms単位で返す
+</code></pre>
+実装の形態によって命令は３種類、関数は２種類に分けられます。<br>
+<br>
+<dl>
+<dt>（Luaでコードを書く人のための内部資料）
+<dd>命令には、C++で実装されている命令、Luaで実装されている命令、defsubに指定したサブルーチンでユーザーが作成する命令の３種類があります。<br>
+このうち最後のはユーザーが作るものです。C++で実装されている命令の実装は、exeの中にバイナリで入っています。Luaで実装されているものはsystem.luaの中にbasic_func.(大文字にした命令名)という関数で実装が書いてあります。<br>
+関数にはユーザー定義のものはありませんので、C++で実装されたバイナリのものと、Luaでsystem.luaの中に同じくbasic_func.(大文字にした関数名)という形で実装されたものとの二種類になります。<br>
+system.luaに書かれているものについては、内部的にどういう処理をしているのかのソースを見ることが出来ます。Luaでコードを書く人は参考にして下さい。
+</dl>
+<pre><code>
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_14"></A>
+<dt>defsubによるユーザー命令定義
+<dd>
+defsubでユーザー命令を定義し、その名前でサブルーチンを呼び出し、paramで引数を受け取って処理することが出来ます。<br>
+それぞれ、詳細は目次「実行制御」から飛べるdefsub param call命令の解説で後述します。<br>
+NScripter2には汎用のスプライト命令は実装されていますが、立ち絵命令や背景命令やイベント絵命令や顔チップ命令はないので、それらはユーザー定義命令として作ることになります。<br>
+少々難しいと思うので、旧NScripter相当の命令の実装がサンプルファイルにありますので、それを参考にしてみて下さい。
+<pre><code>
+;defsubの例です。
+defsub ev,"S"
+.
+.
+.
+@ev
+param %filename
+sp "bg",{name=%filename,x=0,y=0,z=1000}
+print #f,500
+return
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+<A name="p00_15"></a>
+<dt>画像ファイル名指定について
+<dd>画像ファイル名には、普通のファイル名以外に、以下に挙げる特殊な指定が使えます。<br>
+<dl>
+<dt>"*色指定"
+<dd>画面と同じサイズで、指定色で塗りつぶされた長方形画像
+<dt>"*g色1,色2,fx,fy"
+<dd>画面と同じサイズで色1から色2へのグラデーションテクスチャ。fxは横グラデーション、fyは縦グラデーションフラグ。どちらかだけが1ならその方向、ともに0もしくはともに1なら斜めグラデーション（この２つは方向が変わります）
+<dt>"*幅,高さ,色指定"
+<dd>その大きさと色で塗りつぶされた長方形画像
+<dt>"*g幅,高さ,色1,色2,fx,fy"
+<dd>色1から色2へのグラデーションテクスチャ。
+<dt>">l幅,高さ,表示する値,最大値,バーの色,背景色"
+<dd>左塗りつぶしバー。表示する値と最大値はともに整数で。
+<dt>">r幅,高さ,表示する値,最大値,バーの色,背景色"
+<dd>右塗りつぶしバー。表示する値と最大値はともに整数で。
+<dt>":movie(ファイル名[,再生ボリューム])"
+<dd>ムービーテクスチャ（透過無し、ループ無し）
+<dt>":movieloop(ファイル名[,再生ボリューム])"
+<dd>ムービーテクスチャ（透過無し、ループ）
+<dt>":moviealpha(ファイル名[,再生ボリューム])"
+<dd>ムービーテクスチャ（透過あり、ループ無し）
+<dt>":movieloopalpha(ファイル名[,再生ボリューム])"→ムービーテクスチャ（透過あり、ループ）
+<dd>ムービーテクスチャの指定において、再生ボリュームは省略できます。<br>
+<dt>"?文字列,フォント"
+<dd>そのフォントを使った一行文字列画像（大きさは文字列に合わせて確保される）<br>二行以上、あるいはルビが必要な文字列画像が欲しい場合はspformatやtformat、bformatを使って下さい。
+</dl>
+<pre><code>
+sp "fillred",{name="*#FFFF0000",x=0,y=0,z=1000};画面と同サイズの赤の塗りつぶし長方形
+sp "whitebox",{name="*400,400,#FFFFFFFF",x=100,y=100,z=10} ; 400x400、真っ白の長方形
+sp "movie_tex1",{name=":movie(test.nmv)",x=0,y=0,z=1} ; ムービーテクスチャ、ループも透過もなし
+sp "movie_tex2",{name=":movieloopalpha(test.nmv,20)",x=0,y=0,z=1} ; ムービーテクスチャ、透過、ループ、ボリューム20
+sp "textsp",{name="?ＴｅｘｔＳｐ,textfont",x=200,y=200,z=0} ; 文字列スプライト
+;これより前にtextfontがfont命令で定義されているものとする
+</code></pre>
+<p><a href="#top00">目次に戻る</a></p>
+</DL>
+<h3>実行制御</h3>
+<DL>
+<A name="c01_01"></A>
+<dt>quit
+<dd>エンジンを終了しウィンドウを閉じます。BASICのプログラム終了は一般的にendですが、luaではif文の終端にendを使うため、BASICでうっかりそう書くと何も言わずプログラムが終了して戸惑うことが多いので、あえて違う命令にしました。(system.luaで実装)
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_02"></A>
+<dt>select "text1",@label1,"text2",@label2,...
+<dd>選択肢命令です。内部的にはラベル<strong>@selectb</strong>へのサブルーチンジャンプとして解釈されます。詳しくはサンプルを参照して下さい。(system.luaで実装)
+<pre><code>
+select "選択肢テキスト１",@label1,"選択肢テキスト２",@label2,"選択肢テキスト３",@label3
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_03"></A>
+<dt>skip flag
+<dd>スキップモードを設定します。0で通常状態、1でスキップモード、2でオートモードです。(system.luaで実装)
+<pre><code>
+skip 1 ; スキップモード
+skip 0 ; 通常モード
+skip 2 ; オートモード
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_04"></A>
+<dt>trap label[,"スキップ条件"]
+<dd>条件にあった入力があったときにlabelにジャンプします（この場合は自動でトラップモードが解除されます）。labelに#nilを指定するとトラップモードを解除します。<br>
+スキップ条件は省略できます。省略した場合は全部指定、つまり"LRSEP"になります。<br>
+L=左クリック R=右クリック S=スペースキー E=ENTERキー P=パッド入力、です。(C++で実装)<br>
+<pre><code>
+trap @skip_demo
+.
+.
+.
+.
+@skip_demo
+trap #nil ; これがないと、クリックで飛ばさなかったときにトラップモードが解除されない。
+
+trap @l_skip,"L" ; Lボタンをクリックしたときのみジャンプします。
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_05"></A>
+<dt>defsub commandname,"paramlist"
+<dd>ユーザー定義命令を作成します。commandnameが命令名になり、同じ名前のサブルーチンがその命令によってコールされます。<br>
+paramlistは引数（パラメータ）のリストです。左から順番に第一引数、第二引数...です。引数がない場合は""にしてください。(C++で実装)<br>
+<dl>
+<dt>paramlistの文字の意味
+<dd>
+<dl>
+<dt>"*"
+<dd>以下の引数は全部型チェックをせずそのまま受け取る。数も制限無し
+<dt>"A"
+<dd>どんな型でもひとつ受け取る。
+<dt>"N"
+<dd>数値をひとつ受け取る。
+<dt>"S"
+<dd>文字列をひとつ受け取る。シンボルやラベル名もこれで受け取ることが出来る。
+<dt>"?"
+<dd>その引数は、あってもなくてもよい。無い場合は、Luaではnil、BASICではシンボル#nilになる。?N ?S のように使う。
+<dt>"R"
+<dd>vsetやvgetに使う変数名を受け取る。いわゆる「参照渡し」をするときに使う。
+<dt>"T"または"O"
+<dd>テーブル記法を受け取る。結果は文字列になる。Lua側ではそれをbasic.decodetable(str)で処理する。
+<dt>"."
+<dd>一つ前の引数が同じ型で任意の数続くことを表す。"S."や"N."のように使う。
+</dl>
+</dl>
+<pre><code>
+defsub bg,"S";bg命令を定義
+defsub ld,"NS";ld命令を定義
+goto @game_start
+
+@bg
+param %name
+sp "bg",{name=%name,x=0,y=0,z=1000}
+print #f,500
+return
+
+@ld
+param %pos,%name ; pos=-1で左、pos=0で真ん中、pos=1で右、を想定。
+%spname="chr"+STR(%pos)
+sp %spname,{name=%name,x=1024,y=768,z=1}
+getspinfo %spname,%info
+%x=512+256*%pos-%info.w/2
+%y=768-%info.h
+spmove %spname,%x,%y
+print #f,250
+return
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_06"></A>
+<dt>param var1[,var2,var3,...]
+<dd>defsubで定義された命令において、渡されたパラメータを受け取ります。<br>
+詳細や使用例は一つ上のdefsubの項目を参照して下さい。(C++で実装)。<br>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_07"></A>
+<dt>vset vname,value
+<dd>第一引数の文字列が示す変数名の変数に第二引数の値を代入します。<br>
+defsub命令でparamlistが"R"のところは与えた変数名が文字列で入るので、そこへ代入するのに使います。(C++で実装)<br>
+<pre><code>
+defsub test,"R"
+.
+.
+test v
+
+@test
+param %s
+vset %s,"text" ; 呼び出し元が指定した変数vにtextを代入します。
+return
+;なお、ここではグローバル変数を渡していますが、どんな変数でも渡せます。
+
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+
+<A name="c01_08"></A>
+<dt>call @label,"paramlist"[,param1,param2,...]
+<dd>defsub定義無しであたかも命令のようにサブルーチンを呼ぶ命令です。<br>
+defsubは二重定義出来ず、プログラムの頭の方で設定しておく必要があるため、パラメーターは渡したいけど一時的にしか使わないような処理は、こちらで書くと便利なことがあります。(C++で実装)<br>
+<pre><code>
+call @lb,"SN","test",4
+.
+.
+.
+@lb
+param %s,%n
+for %i=0 to %n
+  cprint %s
+next
+return
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_09"></A>
+<dt>exec "basicsrc"
+<dd>与えられた文字列をBASICスクリプトとして解釈し実行します。文字列変数も使えるので、場合によっては役立ちます。(C++で実装)<br>
+<pre><code>
+str="beep"
+exec str ; beep命令が実行されます。
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_10"></A>
+<dt>getlogtext num,tag変数,text変数
+<dd>num個前のバックログを取得します。tagとtextを受け取る変数をそれぞれ指定します。なお、取得できない場合は#nilが戻ります。<br>現状、ノベルモードでも、得られる情報は表示文単位です。(system.luaで実装)
+<pre><code>
+getlogtext 12,%tag,%text ; 12個前の表示文のタグと本文テキストをそれぞれ取得する。
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_11"></A>
+<dt>novelmode mode
+<dd>ノベルモードに設定します。mode=1でノベルモード、0でADVモード(0がデフォルト)です。<br>
+ノベルモードでは表示文ごとに自動で改ページされなくなるほか、いくつか専用の命令が使えるようになります。詳しくはサンプルを御覧ください。<br>
+このモードは通常のセーブファイルにセーブされます。(system.luaで実装)<br>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="f01_01"></A>
+<dt>flag=getskip()
+<dd>現在のスキップモードを取得します。0が通常時、1がスキップ、2がオートモードです(system.luaで実装)
+<pre><code>
+if getskip()==1 then return ; スキップモード時はリターン
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="f01_02"></A>
+<dt>result=logchk(num)
+<dd>バックログのデータが存在するかどうかチェックします。num個前を調べます。(system.luaで実装)
+<pre><code>
+if logchk(%n)==0 then ～ ;バックログを処理したいときにこんな感じで。
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="f01_03"></A>
+<dt>value=getconfig(key)
+<dd>config.iniから値を取得します。keyもvalueも文字列です。詳しくはWindowsのiniファイルの仕様を調べて下さい。(system.luaで実装)
+<pre><code>
+value=getconfig("chr_name")
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="f01_04"></A>
+<dt>value=vget(vname)
+<dd>引数の文字列が示す変数名値を返します。<br>
+defsub命令でparamlistが"R"のところは与えた変数名が文字列で入るので、そこから値を取得するのに使います。(C++で実装)<br>
+<pre><code>
+defsub test,"R"
+.
+.
+v=125
+test v
+
+@test
+param %s
+cprint vget(%s) ; 125が戻ります。
+return
+</code></pre>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="f01_05"></A>
+<dt>ver=getversion()
+<dd>NScripter2のバージョンを返します。(system.luaで実装)<br>
+<p><a href="#top01">目次に戻る</a></p>
+</DL>
+<h3>実行制御（ノベルモード専用）</h3>
+<dl>
+<A name="c01_50"></A>
+<dt>newpage
+<dd>改ページを実行します。(system.luaで実装)
+<p><a href="#top01_">目次に戻る</a></p>
+<A name="c01_51"></A>
+<dt>gettextpos x変数,y変数
+<dd>TFORMAT SPFORMAT BFORMATのうち一番最後に実行した命令における次のテキスト行の先頭を戻します。textbに渡るのはカーソル表示位置なので改行前ですが、こちらには改行後（次の行先頭）が渡ります。<br>ノベルゲームで選択肢を表示文の下に置きたいときや、FORMAT系で書き込んだ文字列の高さを知りたいときに使います。なお、得られる座標はスプライト左上からの相対座標です。(system.luaで実装)
+<p><a href="#top01_">目次に戻る</a></p>
+<A name="c01_52"></A>
+<dt>skippause mode
+<dd>mode=1で、改ページではないクリック待ちをスキップするモードになります。mode=0で通常と同じです。このモードはシステムセーブデータにセーブされます。(system.luaで実装)<br>
+<p><a href="#top01_">目次に戻る</a></p>
+</dl>
+<h3>GUI処理</h3>
+<DL>
+<A name="c02_01"></A>
+<dt>setscreen flag
+<dd>スクリーンモードを指定します。0でウィンドウモード、1でフルスクリーンモードです。<br>
+なお、NScripter2のフルスクリーンモードは、モニタ解像度はそのままにウィンドウをそれと同じ大きさで作り直し、画像を拡大しています。<br>
+また、この命令を呼びださなくても、ウィンドウの最大化ボタンを押したりAlt+Enterを入力したらスクリーンモードが切り替わることにご注意ください。<br>
+コンフィグ等でウィンドウモードの表示や選択をする場合は、現在の状態をシステム変数で管理するのではなく、getscreen()で得るようにしてください。<br>
+終了時にはシステムセーブデータに自動でスクリーン状態を保存するように作ってあります。(system.luaで実装)<br>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_02"></A>
+<dt>shell "filename or url"
+<dd>指定したファイルをシェルで開きます。実行ファイルなら実行されます。URLを指定すれば、そのURLを規定のブラウザで開きます。(C++で実装)<br>
+<pre><code>
+shell "notepad.exe"
+shell "http://www.google.co.jp"
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_03"></A>
+<dt>caption "captionstr"
+<dd>ウィンドウのタイトルバーに入る文字列を指定します。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_04"></A>
+<dt>setmouse x,y
+<dd>マウスカーソルを指定した座標に移動します。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_05"></A>
+<dt>clearmouse
+<dd>実行時点で処理されていない全てのマウスメッセージ（クリックなど）を消去します。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_06"></A>
+<dt>getclick lu変数[,ru変数,w変数,ld変数,rd変数]
+<dd>マウスクリックを取得します。luは左ボタンアップ、ruは右ボタンアップ、wはホイールアップ／ダウン、ldは左ボタンダウン、rdは右ボタンダウンです。(system.luaで実装)
+<pre><code>
+getclick %lu ; 必要の無い情報は省略できます。
+getclick %lu,%ru
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_07"></A>
+<dt>getmouse x変数,y変数
+<dd>現在のマウス座標を取得します。画面外の場合は-1が戻ります。(system.luaで実装)
+<pre><code>
+getmouse %x,%y
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_08"></A>
+<dt>doevents
+<dd>メッセージを処理します。自前でループを回している場合、これを実行しないとメッセージ処理されません。<br>ボタン命令やclick命令等を実行している場合は内部で行っているので要りません。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_09"></A>
+<dt>sleep miliwait
+<dd>プログラムを指定した時間（単位はミリ秒）スリープさせてCPUに時間を明け渡します。<br>
+スプライトなどのアニメーションまで止まってしまいますので、スプライトアニメーションをさせつつ時間待ちをしたい場合はwaitなどを使って下さい。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_10"></A>
+<dt>clearmessage
+<dd>現状で処理されていないメッセージを消去します。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_11"></A>
+<dt>okbox text,caption
+<dd>「ＯＫ」ボタンだけがあるダイアログを表示し、返答を待って動作を再開します。(system.luaで実装)<br>
+<pre><code>
+okbox "ウィンドウの文章がここにはいります。","ウィンドウタイトルです。"
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_12"></A>
+<dt>yesnobox result変数,text,caption
+<dd>「はい」「いいえ」ボタンがあるダイアログを表示し、はいならば1、いいえならば0をresult変数に戻します。(system.luaで実装)<br>
+<pre><code>
+yesnobox %result,"ウィンドウの文章がここにはいります。","ウィンドウタイトルです。"
+;%resultには、はいならば1、いいえならば0が入っています。
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_13"></A>
+<dt>input result変数,text,caption
+<dd>文字列を入力するダイアログを表示し、入力された文字列をresult変数に戻します。(system.luaで実装)<br>
+<pre><code>
+input %result,"ウィンドウの文章がここにはいります。","ウィンドウタイトルです。"
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_14"></A>
+<dt>resettimer
+<dd>内部タイマをリセットします。0からミリ秒単位で時を刻み始めます。用例はwaittimerやgettimerを参照して下さい。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_15"></A>
+<dt>waittimer mili
+<dd>内部タイマが指定された時間になるまで待ちます。単位はミリ秒です。(system.luaで実装)
+<pre><code>
+resettimer ;ここで内部タイマをリセットする
+.
+.
+.
+waittimer 1000 ; ここで１秒になるまで待つ。
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_16"></A>
+<dt>time year変数,month変数,day変数,hour変数,min変数,sec変数
+<dd>実行時点の年月日日時分秒を取得します。(system.luaで実装)
+<pre><code>
+time %year,%day,%hour,%min,%sec
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_17"></A>
+<dt>beep [freq[,mili]]
+<dd>ビープ音を再生します。指定した周波数(freq)で指定した長さ(miliミリ秒)再生します。省略した場合デフォルトの長さと高さで再生されます。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_18"></A>
+<dt>gbegin
+<dd>
+画面への描画を開始します。ここからgend命令の実行までの間は、画面描画を行うことが出来ます。<br>
+これはテクスチャ等を自前で描画する場合に必要な命令です。スプライト機能を使う場合は必要ありません。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_19"></A>
+<dt>gend
+<dd>画面への描画を終了します。この命令の実行で、実際に画面に描画結果が反映されます。<br>
+これはテクスチャ等を自前で描画する場合に必要な命令です。スプライト機能を使う場合は必要ありません。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_20"></A>
+<dt>gblend mode
+<dd>画面描画のブレンディングモードを指定します。0が通常モードで、1が加算合成モードです。<br>
+これはテクスチャ等を自前で描画する場合に必要な命令です。スプライト機能を使う場合は必要ありません。(system.luaで実装)
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_21"></A>
+<dt>getpad padnum,lx変数,ly変数,rx変数,ry変数,dx変数,dy変数,a変数,b変数,x変数,y変数,start変数,back変数,l1変数,r1変数,l2変数,r2変数,l3変数,r3変数
+<dd>XInput方式のジョイパッドから入力を取得します。padnumはパッド番号です。lx,ly,rx,ryはアナログスティックの数値(-32768～32767)dx,dyはデジタル方向ボタンの数値(-1～1)です（Ｙ軸は上が正なので注意）、start back a b x y l1 r1 l3 r3は押されてなければ0、押されていれば1です。l2 r2はアナログトリガなので、0～255で取得します。なお、情報の取得に失敗したときはlx変数に#nodataが戻ります。(system.luaで実装)<br>
+※なお、パッド系命令を使う場合はnscr2pad.dllがnscr2.exeと同じフォルダにある必要があります。<br>
+<pre><code>
+getpad 0,%lx,%ly,%rx,%ry,%dx,%dy,%a,%b,%x,%y,%start,%back,%l1,%r1,%l2,%r2,%l3,%r3
+if %lx&lt;&gt;#nodata then
+  ;データ入力があったのでパッド処理
+end
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="c02_22"></A>
+<dt>ggetsize w変数,h変数
+<dd>ウィンドウの幅と高さを取得します。(system.luaで実装)<br>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="f02_01"></A>
+<dt>flag=getscreen()
+<dd>現在のスクリーンモードを取得します。0がウィンドウモード、1がフルスクリーンモードです。(system.luaで実装)
+<pre><code>
+if getscreen()==1 then ～;何かフルスクリーンモード用の処理
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="f02_02"></A>
+<dt>getkey(keycode)
+<dd>指定されたキーが押されているかどうかを取得します。一部マウスの取得も出来ます。(system.luaで実装)<br>
+<dl>
+<dt>キーコードの一覧
+<dd>
+<UL>
+<li>英文字（例："A")もしくは数字キー……その文字の表すキー（数字はフルキーのほう）。大文字小文字は区別されない
+<li>+ - * / . =……その文字の表すキー。
+<li>" "もしくは"SPACE"……スペースキー
+<li>"CTRL"……コントロールキー
+<li>"UP"……カーソルキー上
+<li>"DOWN"……カーソルキー下
+<li>"LEFT"……カーソルキー左
+<li>"RIGHT"……カーソルキー右
+<li>"F1"～"F12"……ファンクションキー
+<li>"RETURN" もしくは "ENTER"……ENTERキー
+<li>"PAGEUP"……ページアップキー
+<li>"PAGEDOWN"……ページダウンキー
+<li>"SHIFT"……シフトキー
+<li>"SCROLLLOCK"……スクロールロックキー（ランプ付き状態なら1）
+<li>"NUMLOCK"……ナムロックキー（ランプ付き状態なら1）
+<li>"CAPSLOCK"……キャプスロックキー（ランプ付き状態なら1）
+<li>"LBUTTON"……マウス左ボタン
+<li>"RBUTTON"……マウス右ボタン
+<li>"MBUTTON"……マウス中ボタン
+<li>"NUM0"～"NUM9"……テンキーの0～9
+</UL>
+</dl>
+<pre><code>
+if getkey("CTRL")==1 then ～;CTRLが押されているときの処理
+</code></pre>
+<p><a href="#top02">目次に戻る</a></p>
+<A name="f02_03"></A>
+<dt>mili=gettimer()
+<dd>resettimerから何ミリ秒経ったかを戻します。(system.luaで実装)
+<pre><code>
+resettimer
+.
+.
+.
+.
+
+if gettimer()&lt;1000 then ～;１秒経ってない時にはなんらかの処理
+</code></pre>
+
+<p><a href="#top02">目次に戻る</a></p>
+</DL>
+<h3>コンソール処理</h3>
+<DL>
+<A name="c03_01"></A>
+<dt>copen
+<dd>コンソールを開きます。開くだけで何もしません。なお、これ以外のコンソール系の命令を実行しても自動で開きます。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_02"></A>
+<dt>cclose
+<dd>コンソールを閉じます。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_03"></A>
+<dt>ccaption "ウィンドウタイトル"
+<dd>コンソールのウィンドウタイトルを変更します。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_04"></A>
+<dt>cprint param1[,param2,param3,...]
+<dd>与えたパラメータを連結してコンソールに表示します。パラメータは数値でも文字列でも構いません。最後に改行します。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_05"></A>
+<dt>cwrite param1[,param2,param3,...]
+<dd>与えたパラメータを連結してコンソールに表示します。パラメータは数値でも文字列でも構いません。printと違い、最後に改行がつきません。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_06"></A>
+<dt>clocate x,y
+<dd>カーソルを移動し、次以降の表示をそこからにします。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_07"></A>
+<dt>cgetsize 変数w,変数h
+<dd>コンソールの画面サイズを取得します。wが幅、hが高さです。clocateはこの範囲で指定して下さい。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_08"></A>
+<dt>csetsize w,h
+<dd>コンソールの画面サイズを設定します。wが幅、hが高さです。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_09"></A>
+<dt>cgetcursor 変数x,変数y
+<dd>コンソールの現在の表示位置を変数に取得します。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_10"></A>
+<dt>csettext str,x,y[,cr,cg,cb,br,bg,bb,ci,bi]
+<dd>コンソールの文字列を指定位置に指定カラーで表示します。カラーは省略できます。crcgcbは文字色（赤緑青）、brbgbbは背景色、これらは0か1です。ciとbiは強調（色が明るくなる）です。これも0か1です。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_11"></A>
+<dt>cclear
+<dd>コンソールをクリアします。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_12"></A>
+<dt>ccolor cr,cg,cb,br,bg,bb,ci,bi
+<dd>今後使う色を指定します。crcgcbは文字色、brbgbbは背景色、これらは0か1です。ciとbiは強調（色が明るくなる）です。これも0か1です。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="c03_13"></A>
+<dt>system "commandline"
+<dd>コンソールからコマンドプロンプトへ命令を送ります。(system.luaで実装)
+<pre><code>
+system "dir" ; ディレクトリの内容を表示します。
+system "dir > out.txt" ; リダイレクトも出来ます。
+</code></pre>
+<p><a href="#top03">目次に戻る</a></p>
+<A name="f03_01"></A>
+<dt>str=cread()
+<dd>文字列をキーボードから一行取得します。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+<A name="f03_02"></A>
+<dt>c=cinkey()
+<dd>一文字分の入力を取得します。改行を入力しなくても一文字だけ取得できます。(system.luaで実装)
+<p><a href="#top03">目次に戻る</a></p>
+</dl>
+<h3>フォント処理</h3>
+<dl>
+<A name="c04_01"></A>
+<dt>font "フォント名",{フォント指定文字列}
+<dd>ゲーム中で使うフォントを作成します。フォント名は文字列で指定します。フォントの内容をテーブルで指定して下さい。<br>フォントはセーブされません。スクリプトの最初で実行するといいでしょう。(system.luaで実装)<br>
+<pre><code>
+;全部デフォルト
+font "text1",{}
+;普通のフォント
+font "text2",{name="ＭＳ ゴシック",color=#FFFFFFFF,width=16,height=16}
+;袋文字
+font "text3",{name="ＭＳ ゴシック",style="outline",outlinecolor=#FF000000,color=#FFFFFFFF,width=24,height=24}
+;影付き文字
+font "text4",{name="ＭＳ ゴシック",style="shadow",color=#FFFFFFFF,shadowcolor=#FF000000,width=24,height=24}
+;袋文字＋字グラデーション
+font "text5",{name="ＭＳ ゴシック",style="fancy",outlinecolor=#FF000000,color1=#FFFFEEAA,color2=#FFFFFFFF,shadowcolor=#FF000000,fx=1,fy=1,width=24,height=24}
+</code></pre>
+<p><a href="#top04">目次に戻る</a></p>
+<A name="c04_02"></A>
+<dt>fdelete "フォント名"
+<dd>指定したフォントを削除します。(system.luaで実装)
+<p><a href="#top04">目次に戻る</a></p>
+</dl>
+<h3>スプライト／ボタン処理</h3>
+<dl>
+<A name="c05_01"></A>
+<dt>sp "スプライト名",{テーブル指定文字列}
+<dd>スプライトを作成します。同名のスプライトがある場合、それは削除されます。旧NScripterと違い、複数セル画像は全てのセルの画像をばらばらに指定します。画像としては連結しません。<br>
+animtimeを指定するとセルアニメーションします。アニメーションのタイプはanimtypeで指定します。
+<dl>
+<dt>アニメーションタイプの説明
+<dd>セルが４つのアニメーションの場合は、こうなります。
+<dl>
+<dt>"normal"もしくは指定なしもしくは""
+<dd>0→1→2→3→0→1→2→3→0→1...
+<dt>"stop"
+<dd>0→1→2→3（ここで止まる）
+<dt>"round"
+<dd>0→1→2→3→2→1→0→1→2→3→...
+<dt>"delete"
+<dd>0→1→2→3→スプライト自体を削除。演出などで使います。
+<dt>"lua"
+<dd>animfuncに指定してあるLua関数を呼び出します。Luaがわかる人向け。詳細はsystem.luaのbasic.sprite_animation_checkを参照してください。<br>
+</dl>
+</dl>
+なお、ムービーテクスチャはこのアニメーション設定とは別です（セル内容自体がアニメーションすると考えてください）<br>
+delete=1とすると、ムービーテクスチャの再生が終わった際にスプライトを削除します。これも演出などで使います。<br>
+(system.luaで実装)<br>
+<pre><code>
+;テーブル指定で指定されない値にはデフォルト値があります。
+sp "sp1",{name="test.png",x=100,y=100,z=100,a=128}
+sp "set:sp2",{name={"cell1.png","cell2.png"},x=200,y=200,z=100,cell=0,blend=1}
+;blendは0または省略で通常、1で加算ブレンド
+sp "set:sp2",{name={"cell1.png","cell2.png"},cx=300,cy=300,xs=1.2,ys=1.2,rot=45,z=100,cell=0}
+;角度はディグリー（度）単位です。ラジアンではありません。
+sp "set:sp3",{name={"cell1.png","cell2.png","cell3.png"},x=200,y=200,z=100,animtime=100,animtype="normal"}
+sp "set:sp4",{name="test.png",x=100,y=100,z=100,a=128,effect="nega"};ネガポジ反転
+sp "set:sp5",{name="test.png",x=100,y=100,z=100,a=128,effect="monotone",color=#FF3388FF};モノトーン
+sp "set:sp6",{name=":movieloopalpha(test.nmv)",x=0,y=0,z=0} ; ムービーテクスチャ
+sp "set:sp7",{name=":moviealpha(bomber.nmv)",x=100,y=200,z=0,delete=1} ;ムービーテクスチャ、再生が終わったら削除
+</code></pre>
+<dl>
+<dt>スプライト名の仕様
+<dd>スプライト名は次のように記述されます。<br>
+"setname:spname"<br>
+setname=スプライトセット名、spname=スプライト名<br>
+スプライトセットがフォルダでスプライトが個別ファイルのようなものです。<br>
+スプライトセットはボタン処理の際に指定される他、スプライトセット自体のＺ値や、表示非表示切り替えがあります。<br>
+スプライトセット名を省略すると、スプライトセット名""として扱われます。このスプライトセットはＺ値が10000に設定されています。<br>
+</dl>
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_02"></A>
+<dt>spdelete "スプライト名"
+<dd>スプライトを消去します。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_03"></A>
+<dt>spdeletes "スプライト名前部分文字列"
+<dd>指定した文字列で始まるスプライトを全部削除します。例えば、spdeletes "set:test"とすれば、"set:testa""set:testb"...などがまとめて消去されます。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_04"></A>
+<dt>spcell "スプライト名",cellnum
+<dd>スプライトのセル番号を切り替えます。0～作るときに指定した画像の数-1までです。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_05"></A>
+<dt>spmove "スプライト名",x,y[,a]
+<dd>スプライトを指定位置に移動します。aは省略すると255になります。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_06"></A>
+<dt>spmovelt "スプライト名",cx,cy,xs,ys,rot[,a]
+<dd>スプライトを指定位置に拡大縮小回転を加えて移動します。aは省略すると255になります。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_07"></A>
+<dt>spvisible "スプライト名",flag
+<dd>スプライトの表示状態を切り替えます。flagが1で表示、0で非表示です。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_08"></A>
+<dt>spz "スプライト名",z
+<dd>スプライトのZ値を切り替えます。小さい方が上に表示されます。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_09"></A>
+<dt>spfill "スプライト名",#色指定
+<dd>スプライトを指定した色で塗りつぶします。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_10"></A>
+<dt>spanimationreset
+<dd>全てのスプライトのアニメーションをリセットします。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_11"></A>
+<dt>spset "スプライトセット名",z
+<dd>スプライトセットを作成します。スプライトセットのz値を指定できます。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_12"></A>
+<dt>spsetdelete "スプライトセット名"
+<dd>スプライトセットを削除します。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_13"></A>
+<dt>spsetclear "スプライトセット名"
+<dd>そのスプライトセットに属しているスプライトを全部削除します。スプライトセット自体は残ります。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_14"></A>
+<dt>spsetz "スプライトセット名",z
+<dd>スプライトセットのz値を変更します。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_15"></A>
+<dt>spsetvisible "スプライトセット名",flag
+<dd>スプライトセットの表情状態を切り替えます。flagが1で表示、0で非表示です。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_16"></A>
+<dt>spformat "スプライト名",cell,"表示文字列",{本文設定テーブル指定}[,{ルビ設定テーブル指定}]
+<dd>指定スプライトの指定セルに文字列を書き込みます。これはスプライトを書き換える命令であって、描画命令ではありません。たとえばバックログの文字列を作るとき等に使います。テキスト中に%p等がある場合は単に無視します。なお、ルビ機能を使わない場合はルビ設定は省略できます。(system.luaで実装)<br>
+<pre><code>
+spformat "sp1",0,"あいうえおかきくけこ{漢字/ルビ}さしすせそ",{font="text",x=2,y=2,w=25,h=4},{font="ruby"}
+;ここで、本文のx,yはピクセル単位でスプライトの左上からの座標、wとhは文字数単位で幅と高さです。
+</code></pre>
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_17"></A>
+<dt>spputtext "スプライト名",cell,"表示文字列",{本文設定テーブル指定}[,{ルビ設定テーブル指定}]
+<dd>スプライトに文字列を書き込み、それを逐次表示します。waitで速度を調整できます。速度に0を指定したときは瞬時に全部を表示します。<br>
+テキスト中の\pと文末で、BASICの@textbを呼び出してテキストウィンドウのクリック待ちのインタフェース処理をします。<br>
+ただし、文末が_で終わってる場合は文末でのインタフェース処理はしません。表示が終わるとそのまま次の行に実行を移します。<br>
+デフォルトでは、この命令を実行すると改ページし、スプライトを無色透明でクリアし、指定したx,y座標から字を書き始めます。ADV形式のゲームではこれでいいですが、ノベル形式（１クリック１ページではない、画面全体に字が出るゲーム）では不便なので、novelmodeという命令があります。novelmode 1の状態では、文末で改ページクリック待ち\cを使えるようになります。これを処理するかpageclear命令を処理するまで改ページされません。(system.luaで実装)<br>
+<pre><code>
+spputtext "sp1",0,"あいうえおかきくけこ{漢字/ルビ}さしすせそ",{font="text",x=2,y=2,w=25,h=4,wait=50},{font="ruby"}
+;x,yは文字を書き始める際の左上の座標、省略すると0,0。w,hは横と縦の文字数。waitは文字表示速度。
+;本文テーブルのfontは本文の、ルビテーブルのfontはルビのフォント。
+;ルビテーブルでpxやpyを指定すると、ルビの送り幅が指定できる（省略するとフォントの幅になる）
+</code></pre>
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_18"></A>
+<dt>getscreenshot "ビットマップ名"
+<dd>スプライトで構成されている現在の画面のスクリーンショットを取り、ビットマップオブジェクトに格納します。ビットマップについては↓のビットマップ処理の項目を参照して下さい。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_19"></A>
+<dt>btnclear ["スプライトセット名",{デフォルトのスプライト操作文字列}]
+<dd>ボタン設定をクリアします。設定はスプライトセットごとに別です。デフォルトのスプライト操作文字列は、どのボタンにもカーソルが乗ってないときに実行されます。スプライト操作文字列についてはbtnstrの項目で解説します。<br>
+なお、スプライトセット名を省略するとスプライトセット""、スプライト操作文字列を省略すると""（何もしない）になります。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_20"></A>
+<dt>btn "スプライト名",{ボタン設定テーブル}
+<dd>指定したスプライトをボタンにします。(system.luaで実装)<br>
+<dl>
+<dt>ボタン設定テーブル
+<dd>
+on="スプライト操作文字列"　ボタンにカーソルが重なったときに実行する処理を指定します。省略すると自分自身をセル１にするものになります。<br>
+off="スプライト操作文字列"　ボタンからカーソルが離れたときに実行する処理を指定します。省略すると自分自身をセル０にするものになります。<br>
+style="スタイル指定"<br>
+　ボタンのスタイルを指定します。省略すると"push"になります。次の種類があります。<br>
+　"push" または"" プッシュボタン、重なっているときにセル1、離れているときにセル0を表示、戻り値はスプライト名です。<br>
+　"toggle" トグルボタン 押すごとにセル0と1が切り替わります。戻り値は"スプライト名:0"もしくは"スプライト名:1"です。<br>
+　"bar" バー セルをバーのように使って、スプライトの中のどこをクリックしたかでバーの位置が変わります。ちょっとややこしいのでサンプルを参照してください。<br>
+align="left" もしくは align="right"　バータイプのボタンで、スプライトのどちらの端を0にするかを選択します。省略時のデフォルトは"left"です。<br>
+notreset=1　プッシュボタンで、押した後に通常ならセルが0に戻りますが、1のまま戻らないようにします。<br>
+
+</dl>
+<pre><code>
+btn "window:sp1"
+btn "window:sp2",{style="push"}
+btn "window:sp3",{style="toggle"}
+btn "window:sp4",{on="P(sp1,0)P(sp2,1)"}
+btn "window:bar0",{style="bar"}
+</code></pre>
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_21"></A>
+<dt>btnexec 戻り値変数名,"スプライトセット名"[,{ボタン処理テーブル}]
+<dd>ボタン処理を実行し、戻り値を変数に返します。戻り値にはスプライトセット名は含まれません。(system.luaで実装)<br>
+<dl>
+<dt>ボタン処理テーブル
+<dd>
+<dl>
+<dt>wheel=1<dd>ホイール入力を取得します。戻り値は、#WU(ホイールアップ時) #WD(ホイールダウン時)です。
+<dt>ctrl=1<dd>コントロールキーを取得します。#CTRLが戻ります。
+<dt>spcret=1<dd>スペースキーとリターンキーを取得します。" "もしくは#RETURNを返します。
+<dt>automode=1<dd>オートモードを実行します。ボイスがなっているときはボイスが終了したとき、なっていないときはtimeで指定した時間が過ぎたときに処理を続行します。タイムアウト（もしくはボイス終了）時の戻り値は#TIMEOUTです。
+<dt>time=1000<dd>タイムアウト時を指定します。オートモード時には、ボイスがなっていないとき、オートモードでないときはどのような場合でも指定時間でタイムアウトします。<br>
+<dt>ldown=1<dd>マウス左ボタンの押し下げを判定します。#LDが戻ります。<br>
+<dt>rdown=1<dd>マウス右ボタンの押し下げを判定します。#RDが戻ります。<br>
+<dt>func=1<dd>ファンクションキーを取得します。#F1～#F12が戻ります。<br>
+<dt>cursor=1<dd>カーソルキーを取得します。#UP #DOWN #LEFT #RIGHTが戻ります。<br>
+<dt>alphabet=1<dd> アルファベットキーを取得します。#KEY_A～#KEY_Zが戻ります。<br>
+<dt>sizechange=1<dd> スクリーンモードが変更されると#SIZECHANGEが戻ります（コンフィグなどで使います）<br>
+</dl>
+<dt>変数に返される戻り値
+<dd>以下、「スプライト名」とありますが、スプライトセット名は含まれないので注意してください。
+<dl>
+<dt>プッシュボタン<dd>"スプライト名"
+<dt>トグルボタン<dd>"スプライト名:0"もしくは"スプライト名:1"
+<dt>バー<dd>"スプライト名:セル番号"
+<dt>ボタンではないところをクリックしたとき<dd>""
+<dt>右クリック時<dd>#R
+<dt>パッドボタン入力<dd>（basic.pad_enableが真のときのみ）#PAD_A～#PAD_R3 パッド入力の値が戻ります。
+<dt>その他<dd>ボタン処理テーブルで指定した値
+
+</dl>
+</dl>
+ボタンは色々な値を戻すので、処理するものだけ判定して、しないものは、どれでもなかったときにbtnexec命令に戻るように組むといいでしょう。<br>
+※なお、パッド系命令を使う場合はnscr2pad.dllがnscr2.exeと同じフォルダにある必要があります。<br>
+<pre><code>
+;ここより前にwindow:btn1とwindow:btn2はロードされているものとする。
+btnclear "window"
+btn "window:btn1"
+btn "window:btn2"
+@btnloop
+btnexec %ret,"window"
+if %ret==#r then ;右クリック時の処理
+if %ret=="btn1" then ;ボタン１の時の処理
+if %ret=="btn2" then ;ボタン２の時の処理
+goto @btnloop
+</code></pre>
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_22"></A>
+<dt>btnstr "スプライト操作文字列"
+<dd>スプライト操作文字列を実行します。スプライト操作文字列はボタン処理にも使われますが、スプライト操作文字列を単体で実行するのがこの命令です。ここでスプライト操作文字列の仕様についても説明します。(system.luaで実装)<br>
+<dl>
+<dt>スプライト操作文字列
+<dd>
+"S(サウンドファイル名)"　そのサウンドを再生します。<br>
+"P(スプライト名,セル番号)"　指定したスプライトを表示状態にし、セル番号を変更します。セル番号とありますが、これは整数の数値を直接書かなければなりません。変数は使えません。<br>
+"C(スプライト名)"　指定したスプライトを非表示状態にします。<br>
+"M(スプライト名,x,y)"　指定したスプライトを移動します。この座標にも整数を直接書いて下さい。変数は使えません。<br>
+これらはつなげて組み合わせることも出来ます。
+</dl>
+<pre><code>
+btnstr "S(se/test.ogg)P(set:sp1,1)"
+</code></pre>
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_23"></A>
+<dt>print #transition[,time[,option]]
+<dd>
+スプライトの描画状態を変更すると、内部にその変化が蓄積されます。<br>
+PRINT命令で実際に画面に反映することが出来ます。この仕様は旧NScripterと同じです。<br>
+シンボルはトランジションの種類を指定します。時間の単位はミリ秒です。<br>
+#c もしくは"" 瞬時表示 時間指定はいりません。<br>
+#f クロスフェード<br>
+#ru #rd #rl #rr ロール上下左右<br>
+#su #sd #sl #sr スクロール上下左右<br>
+#u ユニバーサルトランジション 三番目の引数にルール画像を取ります。旧NScripterのトランジション18番と同じです。<br>
+<pre><code>
+print #c
+print #rd,500
+print #sl,500
+print #f,500
+print #u,500,"rule.png"
+</code></pre>
+(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_24"></A>
+<dt>wait time[,clickflag]
+<dd>指定した時間処理を中断します。時間の単位はミリ秒です。クリックフラグを1にするとクリックで飛ばせるようになります。なお、この命令の実行中もアニメーションなどは表示されます。<br>sleepを使うとアニメーションも止まってしまうので、スプライトを使った普通のゲーム中はこちらを使うことが多いでしょう。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_25"></A>
+<dt>click
+<dd>クリック待ちをします。左クリックで先へ進めます。アニメーションは実行されます。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_26"></A>
+<dt>lrclick
+<dd>左右どちらのクリックでも飛ばせるクリック待ちをします。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_27"></A>
+<dt>spdraw
+<dd>スプライト全てを描画します。これはテクスチャなどの低水準描画命令と一緒にスプライトを描画したいときに使います。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="c05_28"></A>
+<dt>getspinfo "スプライト名",変数info
+<dd>スプライト情報を取得します。構造体に情報を格納します。<br>
+変数がinfoの場合は次のようになります。(system.luaで実装)<br>
+（通常のスプライトの場合）<br>
+info.x ; X座標<br>
+info.y ; Y座標<br>
+（回転拡縮指定のスプライトの場合）<br>
+info.cx ; CX座標<br>
+info.cy ; CY座標<br>
+info.xs ; X拡大率<br>
+info.ys ; Y拡大率<br>
+info.rot ; 回転角<br>
+（どちらでも共通）<br>
+info.z ; Z値<br>
+info.a ; α値<br>
+info.cell ; セル番号<br>
+info.cellnum ; セルの数<br>
+info.w ; 画像の幅<br>
+info.h ; 画像の高さ<br>
+info.animtype ; アニメーションタイプ<br>
+info.animtime ; アニメーション時間<br>
+<p><a href="#top05">目次に戻る</a></p>
+<A name="f05_01"></A>
+<dt>cell=getspcell("スプライト名")
+<dd>指定したスプライトの現在のセル番号を取得します。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+<A name="f05_02"></A>
+<dt>flag=sphitcheck("スプライト名",x,y)
+<dd>指定したスプライトの内側に座標x,yが含まれるなら1、含まれないなら0を返します。現状、拡大縮小回転タイプのスプライトには対応していません。(system.luaで実装)
+<p><a href="#top05">目次に戻る</a></p>
+</dl>
+<h3>テクスチャ処理</h3>
+スプライトの描画系命令ではテクスチャは管理されていませんし、セーブ時にも保存されません。<br>
+内部的にはスプライトもテクスチャで実装されています。詳しくはsystem.luaを参照して下さい。<br>
+基本的にはスプライト命令でほとんどの用は足せると思います。こちらは、スプライトを実装するための土台という側面が強いです。<br>
+<dl>
+<A name="c06_01"></A>
+<dt>tcreate "テクスチャ名",w,h
+<dd>空白のテクスチャを作成します。幅と高さを指定します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_02"></A>
+<dt>tload "テクスチャ名","画像ファイル名"
+<dd>画像をテクスチャとしてロードします。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_03"></A>
+<dt>tfromb "テクスチャ名","ビットマップ名"
+<dd>ビットマップオブジェクトをテクスチャに変換します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_04"></A>
+<dt>tdelete "テクスチャ名"
+<dd>テクスチャを削除します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_05"></A>
+<dt>tdraw "テクスチャ名",x,y,a
+<dd>テクスチャを指定位置に指定の透過度で描画します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_06"></A>
+<dt>tdrawlt "テクスチャ名",cx,cy,xs,ys,rot,a
+<dd>テクスチャを回転拡大縮小して描画します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_07"></A>
+<dt>tfill "テクスチャ名",#色指定
+<dd>テクスチャを指定した色で塗りつぶします。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_08"></A>
+<dt>tfrect "テクスチャ名",lx,ly,rx,ry,#色指定
+<dd>テクスチャの(lx,ly)-(rx,ry)の範囲を指定色で塗りつぶします。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_09"></A>
+<dt>tgetsize "テクスチャ名",幅変数名,高さ変数名
+<dd>テクスチャの幅と高さを取得します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_10"></A>
+<dt>tsave "テクスチャ名","セーブファイル名"
+<dd>テクスチャの内容をpngファイルとしてセーブします。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_11"></A>
+<dt>tbegin "テクスチャ名"
+<dd>テクスチャへの描画を開始します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_12"></A>
+<dt>tend
+<dd>テクスチャへの描画を終了します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="c06_13"></A>
+<dt>tformat "テクスチャ名","表示文字列",{本文設定テーブル指定}[,{ルビ設定テーブル指定}]
+<dd>テクスチャに文字列を書き込みます。引数の詳細はspformatを参照して下さい。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+<A name="f06_01"></A>
+<dt>flag=tisplaying("テクスチャ名")
+<dd>ムービーテクスチャが再生中の場合は1、再生が終了している場合は0を戻します。(system.luaで実装)
+<p><a href="#top06">目次に戻る</a></p>
+</dl>
+<h3>ビットマップ処理</h3>
+ビットマップは描画するためではなく内部で加工するための画像オブジェクトです。スクリーンショットを加工したり、いろいろなツールを作るときに使えます。<br>
+<dl>
+<A name="c07_01"></A>
+<dt>bcreate "ビットマップ名",w,h
+<dd>空白のビットマップを作成します。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_02"></A>
+<dt>bload "ビットマップ名","画像ファイル名"
+<dd>画像ファイルからビットマップを作成します。ビットマップという名前ですが、対応フォーマットはpngとjpegです。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_03"></A>
+<dt>bfromt "ビットマップ名","テクスチャ名"
+<dd>テクスチャをビットマップに変換します。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_04"></A>
+<dt>bdelete "ビットマップ名"
+<dd>ビットマップを削除する。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_05"></A>
+<dt>bsave "ビットマップ名","セーブファイル名"[,品質]
+<dd>ビットマップを画像ファイルとして保存します。拡張子にpngを選べばPNGファイル、jpegもしくはjpgを選べばJPEGファイルになります（英字の大文字小文字はどちらでも構いません）。<br>JPEGの場合のみ品質を0-100で指定できます。省略した場合は95になります。<br>この命令はWindows BMP形式には対応していませんのでご注意ください。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_06"></A>
+<dt>bfill "ビットマップ名",#色指定
+<dd>指定した色でビットマップを塗りつぶします。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_07"></A>
+<dt>bfrect "ビットマップ名",lx,ly,rx,ry,#色指定
+<dd>指定した色で(lx,ly)-(rx,ry)の範囲を塗りつぶします。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_08"></A>
+<dt>breverse "ビットマップ名",xflag,yflag
+<dd>ビットマップを反転します。1を指定した軸を反転します。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_09"></A>
+<dt>bresize "ビットマップ名",w,h
+<dd>画像を拡大縮小してサイズ変更します。幅と高さを指定します。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_10"></A>
+<dt>btrim "ビットマップ名",lx,ly,rx,ry
+<dd>(lx,ly)-(rx,ry)の範囲を切り抜いてそこだけを同じ名前のビットマップにします。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_11"></A>
+<dt>bjoinx "ビットマップ名１","ビットマップ名２"
+<dd>ビットマップ２をビットマップ１の右にくっつけて新しいビットマップ１にします。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_12"></A>
+<dt>bjoiny "ビットマップ名１","ビットマップ名２"
+<dd>ビットマップ２をビットマップ１の下にくっつけて新しいビットマップ１にします。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_13"></A>
+<dt>bgetsize "ビットマップ名",幅変数名,高さ変数名
+<dd>ビットマップの幅と高さを取得します。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_14"></A>
+<dt>bdup "新ビットマップ名","コピー元ビットマップ名"
+<dd>ビットマップをコピーします。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_15"></A>
+<dt>bgradation "ビットマップ名",#色1,#色2,xflag,yflag
+<dd>色１から色２へのグラデーションでビットマップを塗りつぶします。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_16"></A>
+<dt>bnega "ビットマップ名"
+<dd>ビットマップをネガポジ反転させます。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_17"></A>
+<dt>bmonotone "ビットマップ名",#色指定
+<dd>ビットマップを指定色でモノトーン化します。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_18"></A>
+<dt>bbegin "ビットマップ名"
+<dd>ビットマップへの描画を開始します。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_19"></A>
+<dt>bend
+<dd>ビットマップへの描画を終了します。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+<A name="c07_20"></A>
+<dt>bformat "ビットマップ名","表示文字列",{本文設定テーブル指定}[,{ルビ設定テーブル指定}]
+<dd>ビットマップに文字列を書き込みます。引数の詳細はspformatを参照して下さい。(system.luaで実装)
+<p><a href="#top07">目次に戻る</a></p>
+</dl>
+<h3>動画処理</h3>
+<dl>
+<A name="c08_01"></A>
+<dt>movie filename[,clickskipflag]
+<dd>画面全体にムービーを再生します。clickskipflagに0を指定するとクリックで飛ばせなくなります。(system.luaで実装)
+<p><a href="#top08">目次に戻る</a></p>
+<A name="c08_02"></A>
+<dt>mreset
+<dd>全ムービーテクスチャのアニメーションをリセット（最初から再生）します。(system.luaで実装)
+<p><a href="#top08">目次に戻る</a></p>
+</dl>
+<h3>音声処理</h3>
+<dl>
+<A name="c09_01"></A>
+<dt>bgmplay filename
+<dd>ＯＧＧファイルをＢＧＭとして再生します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_02"></A>
+<dt>bgmplayonce filename
+<dd>ＯＧＧファイルをＢＧＭとして再生します。こちらはループしません。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_03"></A>
+<dt>bgmstop
+<dd>ＢＧＭの再生を停止します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_04"></A>
+<dt>bgmfadeout militime
+<dd>ＢＧＭのフェードアウト時間を指定します。単位はミリ秒です。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_05"></A>
+<dt>bgmvolume volume
+<dd>ＢＧＭのボリュームを指定します。0～-10000です（DirectXの仕様に合わせてあります）。0が最大で、-10000が完全無音ですが、-2000くらいでほとんど聞こえなくなります。実際に試していい感じの値にしてください。<br>ボリュームに関しては他のすべての音声処理で同じ範囲です。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_06"></A>
+<dt>seplay ch,filename
+<dd>ＳＥを再生します。チャンネル番号とファイル名を指定してください。チャンネル番号は0-15です。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_07"></A>
+<dt>seloop ch,filename
+<dd>ＳＥをループで再生します。チャンネル番号とファイル名を指定してください。チャンネル番号は0-15です。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_08"></A>
+<dt>sestop ch
+<dd>ＳＥの再生をストップします。チャンネル番号を指定してください。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_09"></A>
+<dt>sestopall
+<dd>すべてのチャンネルのＳＥの再生をストップします。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_10"></A>
+<dt>sefadeout militime
+<dd>ＳＥのフェードアウト時間を指定します。単位はミリ秒です。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_11"></A>
+<dt>sevolume volume
+<dd>ＳＥ全体のボリュームを設定します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_12"></A>
+<dt>sechvolume ch,volume
+<dd>あるチャンネルのボリュームを設定します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_13"></A>
+<dt>voiceplay filename[,speed]
+<dd>ボイスを再生します。speedは省略できます。ここに２を指定すると倍速で再生します。<br>なお、ファイル名に""を指定すると今鳴っているボイスが停止します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_14"></A>
+<dt>voicewait
+<dd>ボイスの再生終了を待ちます。アニメーション等は実行されます。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_15"></A>
+<dt>voicevolume volume
+<dd>ボイスのボリュームを設定します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_16"></A>
+<dt>bgvplay ch,filename
+<dd>ＢＧＶ(Back Ground Voice、台詞ボイス(VOICEPLAY命令)が再生されていないときにループで再生されるボイス）を再生します。chはチャンネルで0～15です。ファイル名に""を指定するとＢＧＶが停止します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_17"></A>
+<dt>bgvfadeout militime
+<dd>ＢＧＶのフェードアウト時間を指定します。単位はミリ秒です。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_18"></A>
+<dt>bgvolume volume
+<dd>ＢＧＶのボリュームを設定します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_19"></A>
+<dt>sound "サウンド名"
+<dd>サウンドオブジェクトを作成します。<br>sound sdelete splay sstop svolume span sfadeout spause sresume sisplayingは、サウンドオブジェクトを直接扱う命令です。BGMやSEやVOICEの命令も内部的にはこれで実現されています。<br>
+これらのオブジェクトはセーブ機能ではセーブされません。あまり直接使う機会はないかもしれません。実装詳細はsystem.luaの該当部分を読んでください。<br>
+なお、BGM系命令はサウンドオブジェクト"BGM0"もしくは"BGM1"が交互に、ボイス命令は"VOICE"、SEは"SE0""SE1"、BGVは"BGV0""BGV1"...で処理されます。これらにSOUND系命令の機能を使いたい場合はこの名前でアクセスしてください。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_20"></A>
+<dt>sdelete "サウンド名"
+<dd>サウンドオブジェクトを削除します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_21"></A>
+<dt>splay "サウンド名",{name="サウンドファイル名",loop=ループフラグ(0か1),looppoint=ループ再開位置(秒単位、小数可),volume=ボリューム,pan=パン,speed=スピードフラグ(1か2),fadeintime=フェードイン時間(ミリ秒単位)}
+<dd>サウンドを再生します。nameだけは必須ですが、あとは省略できます。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_22"></A>
+<dt>sstop "サウンド名"
+<dd>再生中のサウンドオブジェクトを停止します。オブジェクト自体はなくなりません。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_23"></A>
+<dt>svolume "サウンド名",vol
+<dd>サウンドオブジェクトのボリュームを設定します。他と同じく0～-10000です。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_24"></A>
+<dt>span "サウンド名",pan
+<dd>サウンドをパン（左右に偏らせる処理）します。-10000～10000で、真ん中が0です。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_25"></A>
+<dt>sfadeout "サウンド名",フェードアウト時間
+<dd>サウンドをフェードアウトします。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_26"></A>
+<dt>spause "サウンド名"
+<dd>サウンドの再生を一時停止します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="c09_27"></A>
+<dt>sresume "サウンド名"
+<dd>一時停止していたサウンドの再生を再開します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="f09_01"></A>
+<dt>vol=getbgmvolume()
+<dd>ＢＧＭのボリュームを取得します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="f09_02"></A>
+<dt>vol=getsevolume()
+<dd>ＳＥのボリュームを取得します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="f09_03"></A>
+<dt>vol=getvoicevolume()
+<dd>ボイスのボリュームを取得します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="f09_04"></A>
+<dt>vol=getbgvvolume()
+<dd>ＢＧＶのボリュームを取得します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+<A name="f09_05"></A>
+<dt>flag=sisplaying("サウンド名")
+<dd>サウンドオブジェクトが再生中なら1、停止していれば0を返します。(system.luaで実装)
+<p><a href="#top09">目次に戻る</a></p>
+</dl>
+<h3>演出処理</h3>
+<dl>
+<A name="c10_01"></A>
+<dt>transition "切り替え元画像","切り替え先画像",rate,typestr,option
+<dd>トランジション途中の画像を描画する命令です。print命令で行うトランジションは内部的にこれを呼び出しています。これを使うのはトランジションをカスタマイズする場合でしょうから、詳しくはsystem.luaと、Luaマニュアルのほうを参照してください。(system.luaで実装)
+<p><a href="#top10">目次に戻る</a></p>
+<A name="c10_02"></A>
+<dt>quake [time,num,size]
+<dd>画面を地震のように揺らします。エフェクトに掛ける時間、揺らす回数、揺らす幅を指定します。<br>
+幅の単位はピクセルではありません。1=画面の1/32です。(system.luaで実装)<br>
+<p><a href="#top10">目次に戻る</a></p>
+</dl>
+<h3>セーブ／ロード／ファイル処理</h3>
+<dl>
+<A name="c11_01"></A>
+<dt>save num
+<dd>セーブを実行します。numはセーブ番号です。整数を指定してください。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="c11_02"></A>
+<dt>load num
+<dd>ロードを実行します。numはセーブ番号です。データがない場合はエラー終了します。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="c11_03"></A>
+<dt>savepoint
+<dd>明示的にセーブポイントを更新します。呼び出さなくても表示文先頭では自動的に呼び出されています。savemode 0時には自動セーブポイント更新は停止しますが、この命令を実行した時はセーブポイントが更新されます。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="c11_04"></A>
+<dt>savemode flag
+<dd>セーブポイントが自動で更新されるかどうかを設定します。0で自動更新が止まります。1で再開します。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="c11_05"></A>
+<dt>filetime filename,year変数,month変数,day変数,hour変数,min変数,sec変数
+<dd>ファイルの更新年月日時分秒を取得します。ファイルがない場合は変数の値を変更しません。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="c11_06"></A>
+<dt>savetime num,year変数,month変数,day変数,hour変数,min変数,sec変数
+<dd>セーブデータ、セーブ番号numの更新年月日時分秒を取得します。データがない場合は変数の値を変更しません。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="c11_07"></A>
+<dt>linsert @label(もしくはlabel "@label")
+<dd>ラベルログに、そのラベルを通過したものとして挿入します。ラベルそのものでもラベル名文字列でもどちらでも指定できます。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="c11_08"></A>
+<dt>finsert filename
+<dd>ファイルログに、そのファイルにアクセスしたものとして挿入します。(system.luaで実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="c11_09"></A>
+<dt>strsave filename,str
+<dd>文字列をファイルに保存します。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="f11_01"></A>
+<dt>flag=lchk(@label)(もしくはflag=lchk("@label"))
+<dd>そのラベルを通過したことがあれば1、なければ0になります。回想モードなどで使うといいでしょう。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="f11_02"></A>
+<dt>flag=schk(num)
+<dd>セーブ番号numのセーブデータが存在すれば1、なければ0を返します。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="f11_03"></A>
+<dt>flag=tchk()
+<dd>@textの中で使います。その表示文を以前に読んだことがあれば1、なければ0を返します。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="f11_04"></A>
+<dt>flag=filechk(filename)
+<dd>ファイルfilenameがアーカイブもしくは裸ファイルの中に「存在すれば」1、なければ0を返します。なお、このfilenameにはアーカイブ自身(01.ns2など)も指定できます。パッチの有無などの判定に使えます。(system.luaで実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="f11_05"></A>
+<dt>flag=fchk(filename)
+<dd>そのファイルを「読み込んだことがあれば」1を、なければ0を返します。ＣＧモードなどの実装に使います。filechkとの違いにご注意ください。(system.luaで実装)
+<p><a href="#top11">目次に戻る</a></p>
+<A name="f11_06"></A>
+<dt>str=strload(filename)
+<dd>strsaveでセーブした文字列や、その他テキストファイルを文字列としてロードします。アーカイブの中からも読めます。(C++で実装)
+<p><a href="#top11">目次に戻る</a></p>
+</dl>
+
+
+<h3>変数の変換・配列・文字列処理</h3>
+<dl>
+<A name="c12_01"></A>
+<dt>split src,sep,val1[,val2,....]
+<dd>文字列srcを区切り文字sepで分割して変数に代入していきます。データがなくなると""を代入します。(C++で実装)
+<pre><code>
+split "test/abc/def","/",a,b,c ; a="test" b="abc" c="def"
+split "abc,def",",",a,b,c ; a="abc" b="def" c=""
+</code></pre>
+<p><a href="#top12">目次に戻る</a></p>
+<A name="c12_02"></A>
+<dt>splita src,sep,var
+<dd>splitの配列版です。文字列srcを区切り文字sepで分割して配列varに代入します。一番最後に#NILというシンボルを代入します。(C++で実装)
+<pre><code>
+splita "test/abc/def","/",a ; a[0]="test" a[1]="abc" a[2]="def" a[3]=#NIL
+</code></pre>
+<p><a href="#top12">目次に戻る</a></p>
+<A name="c12_03"></A>
+<dt>vclear var
+<dd>与えた名前の変数、配列、もしくは構造体をクリアします。値を消去し宣言前の状態になります。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="c12_04"></A>
+<dt>vcopy dest,src
+<dd>配列もしくは構造体srcを配列もしくは構造体destにコピーします。(C++で実装)
+<pre><code>
+a[0]=1
+a[1]=2
+a[2]=3
+vcopy b,a ; b[0]=1 b[1]=2 b[2]=3
+fighter.hp=100
+fighter.mp=0
+vcopy monk,fighter ; monk.hp=100 monk.mp=0
+</code></pre>
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_01"></A>
+<dt>flag=isdef(var)
+<dd>変数varが定義（既に何かの値を代入）されていれば1、されていなければ0を戻します。未定義の変数の値を参照すると普通はエラーが出ますが、isdef関数だけは例外です。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_02"></A>
+<dt>n=num(s)
+<dd>文字列を数値に変換します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_03"></A>
+<dt>s=str(n)
+<dd>数値を文字列に変換します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_04"></A>
+<dt>code=asc(c)
+<dd>指定した文字のキャラクターコードを得ます。1バイト文字専用です。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_05"></A>
+<dt>c=chr(code)
+<dd>指定したキャラクターコードの文字を得ます。1バイト文字専用です。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_06"></A>
+<dt>s=strf("printf書式指定",val)
+<dd>与えた数値を書式を整えてした形で文字列に戻します。書式指定にはprintfと同じものを、数値(整数もしくは実数)ひとつ分だけ指定できます。詳しくはC言語のprintfを調べてください。(C++で実装)
+<pre><code>
+s=strf("%3d",12) ; s=" 12"
+s=strf("%04d",15) ; s="0015"
+</code></pre>
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_07"></A>
+<dt>sym=type(val)
+<dd>値の型が数値なら#NUMBER、文字列なら#STRINGを戻します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_08"></A>
+<dt>ret=replace("処理する文字列","検索文字列","置き換え文字列")
+<dd>文字列の単純な置換を行います。置換した結果の文字列を返します。与えた文字列が変数でも、それを直接書き換えるわけではないので注意してください。戻ってきた値を代入しなければなりません。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_09"></A>
+<dt>ret=left(str,num)
+<dd>文字列の左からnum文字を返します。文字列より長い数値を指定すると文字列全部を返します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_10"></A>
+<dt>ret=right(str,num)
+<dd>文字列の右からnum文字を返します。文字列より長い数値を指定すると文字列全部を返します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_11"></A>
+<dt>ret=mid(str,pos,num)
+<dd>文字列の左からpos文字目をスタートとして、そこからnum文字を返します。文字列より長い数値を指定するとposから残り全部を返します。posは0から数えることに注意してください。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_12"></A>
+<dt>ret=trim(str)
+<dd>文字列の左右の端の空白または改行文字を削除して戻します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_13"></A>
+<dt>ret=ltrim(str)
+<dd>文字列の左の端の空白または改行文字を削除して戻します。右は削除しません。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_14"></A>
+<dt>ret=rtrim(str)
+<dd>文字列の右の端の空白または改行文字を削除して戻します。左は削除しません。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_15"></A>
+<dt>l=len(str)
+<dd>文字列の長さをバイト単位で戻します。日本語の文字数ではないことに注意してください。内部的に日本語文字列はUTF-8になっています。一文字2バイトとは限りません(3バイトのことも多いです)(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_16"></A>
+<dt>l=zlen(str)
+<dd>文字列の日本語における文字数を戻します。バイト数ではありません。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_17"></A>
+<dt>ret=lcase(str)
+<dd>文字列中の大文字を全部小文字に変換した文字列を戻します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_18"></A>
+<dt>ret=ucase(str)
+<dd>文字列中の小文字を全部大文字に変換した文字列を戻します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_19"></A>
+<dt>ret=zenkaku(str)
+<dd>文字列を全角文字列に変換した文字列を戻します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_20"></A>
+<dt>ret=join(sep,val1,val2,...)
+<dd>与えた文字列を区切り文字sepで順番につなげた文字列を戻します。(C++で実装)
+<pre><code>
+cprint join("/","abc","def","ghi") ; "abc/def/ghi"が出力される
+</code></pre>
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_21"></A>
+<dt>ret=joina(sep,var)
+<dd>文字列の配列varを0から順番に区切り文字sepでつなげて戻します。(C++で実装)
+<pre><code>
+a[0]="abc"
+a[1]="def"
+a[2]="ghi"
+cprint joina("/",a) ; "abc/def/ghi"が出力される
+</code></pre>
+
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_22"></A>
+<dt>pos=search("処理する文字列","検索する文字列")
+<dd>処理対象の文字列から検索する文字列を探し、その位置を戻します。posは0から数えることに注意してください。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_23"></A>
+<dt>ret=regex_replace("処理する文字列","正規表現","変換対象")
+<dd>正規表現で置換した文字列を返します。正規表現については、boost 正規表現 で検索してください。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_24"></A>
+<dt>l=vlen(var)
+<dd>varで指定した配列の要素数を戻します。添字0から数えて、未定義の番号がもしあればそこでカウントが止まります。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_25"></A>
+<dt>ub=vubound(var)
+<dd>配列varの最も大きい添字番号を戻します。間に未定義の番号があっても正しく動作します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+<A name="f12_26"></A>
+<dt>lb=vlbound(var)
+<dd>配列varの最も小さい添字番号を戻します。間に未定義の番号があっても正しく動作します。(C++で実装)
+<p><a href="#top12">目次に戻る</a></p>
+</dl>
+<h3>数学処理</h3>
+<dl>
+<A name="c13_01"></A>
+<dt>randomseed num
+<dd>擬似乱数を初期化します。0を与えると起動後の時間を使って毎回違った初期化をします。同じ種で初期化したい場合は0以外の正の整数を指定してください。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_01"></A>
+<dt>p=pi()
+<dd>円周率を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_02"></A>
+<dt>s=sin(x)
+<dd>サイン関数の値を返します。なお、以下すべての三角関数において、扱う角度の単位は「ラジアン」です。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_03"></A>
+<dt>hs=sinh(x)
+<dd>ハイパーボリックサイン関数の値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_04"></A>
+<dt>c=cos(x)
+<dd>コサイン関数の値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_05"></A>
+<dt>hc=cosh(x)
+<dd>ハイパーボリックコサイン関数の値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_06"></A>
+<dt>t=tan(x)
+<dd>タンジェント関数の値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_07"></A>
+<dt>ht=tanh(x)
+<dd>ハイパーボリックタンジェント関数の値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_08"></A>
+<dt>as=asin(x)
+<dd>アークサイン関数の値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_09"></A>
+<dt>ac=acos(x)
+<dd>アークコサイン関数の値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_10"></A>
+<dt>at=atan(x)
+<dd>アークタンジェント関数の値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_11"></A>
+<dt>at2=atan2(x0,x1)
+<dd>アークタンジェント関数の値を返します。入力をx0/x1で与えます。x0に0を指定すると、x1が正の時π/2、負の時-π/2を返します。 (C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_12"></A>
+<dt>v=random()
+<dd>乱数を返します。値は0～32ビット整数の上限までの整数なので、これをmodで余りを取る等して必要な乱数を得ます。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_13"></A>
+<dt>e=exp(x)
+<dd>指数関数です。自然対数の底eのx乗を得ます。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_14"></A>
+<dt>ln=log(x)
+<dd>自然対数関数です。自然対数の底eを使って、ln(x)を得ます。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_15"></A>
+<dt>l10=log10(x)
+<dd>常用対数関数です。底10を使ってlog10(x)を得ます。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_16"></A>
+<dt>r=rad(x)
+<dd>ディグリー単位（普通の「度」です。直角が90度）の角度を与えると、ラジアンに変換した値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_17"></A>
+<dt>d=deg(x)
+<dd>ラジアン単位の角度を与えるとディグリー単位に変換した値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_18"></A>
+<dt>s=sqrt(x)
+<dd>xの平方根を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_19"></A>
+<dt>f=floor(x)
+<dd>切り捨て関数です。xの小数点以下を負の無限大方向に丸めた値を返します。NScripter2は整数型を持たず、すべての計算は実数で行われますので、この関数は座標などを扱うときによく使います。(C++で実装)
+<pre><code>
+cprint floor(3.14) ; -> 3
+cprint floor(-1.5) ; -> -2 ; 小さい方に丸めています。
+</code></pre>
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_20"></A>
+<dt>c=ceil(x)
+<dd>切り上げ関数です。xの小数点以下を正の無限大方向に丸めた値を返します。floorは「床」ceilは「天井」なので、高い低いでイメージするとわかりやすいでしょう。(C++で実装)
+<pre><code>
+cprint ceil(3.14) ; -> 4
+cprint ceil(-1.5) ; -> -1 ; 大きい方に丸めています。
+</code></pre>
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_21"></A>
+<dt>a=abs(x)
+<dd>xの絶対値を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+<A name="f13_22"></A>
+<dt>s=sgn(x)
+<dd>符号関数です。xが正ならば1、0ならば0、負ならば-1を返します。(C++で実装)
+<p><a href="#top13">目次に戻る</a></p>
+</dl>
+<h3>その他の処理</h3>
+<dl>
+<A name="c14_01"></A>
+<dt>lua str
+<dd>文字列strをLuaスクリプトとしてコンパイルし、実行します。(C++で実装)
+<p><a href="#top14">目次に戻る</a></p>
+<A name="c14_02"></A>
+<dt>luafile filename
+<dd>luaスクリプトファイルを読み込んで実行します。(C++で実装)
+<p><a href="#top14">目次に戻る</a></p>
+<A name="c14_03"></A>
+<dt>setclipboard str
+<dd>指定した文字列をクリップボードにテキストとしてコピーします。外部のテキストエディタ等にペースト出来ます。デバッグ機能などに使います。(C++で実装)
+<p><a href="#top14">目次に戻る</a></p>
+<A name="f14_01"></A>
+<dt>result=luaf(str)
+<dd>文字列をLuaスクリプトとして実行します。数値か文字列を返せます。<br>
+内部的には、"return (" .. str .. ")" をコンパイルして実行し、戻った値をBASICにかえしています。(C++で実装)
+<p><a href="#top14">目次に戻る</a></p>
+</dl>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><!--スクロールのための余白-->
+</body>
+</html>
