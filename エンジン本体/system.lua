@@ -1847,10 +1847,16 @@ function basic_func.SPHITCHECK(name,x,y)
 	local r=basic.spriteset[setname][spname]
 	if r.filtername then return 0 end
 	if r.visible==0 then return 0 end
-	if not r.x then
-		return 0
-	end
 	local w,h=basic.texture[name..":"..r.cell]:getsize()
+	if not r.x then
+		-- 拡大縮小タイプの場合は簡易の処理をする
+		-- 回転への対応はしんどいのでいったん抜きで(需要がありそうならやるかも)
+		local sw = w * r.xs
+		local sh = h * r.ys
+		local sx = r.cx - sw / 2
+		local sy = r.cy - sh / 2
+		if sx<=x and sx+sw>=x and sy<=y and sy+h>=y then return 1 else return 0 end
+	end
 	if r.x<=x and r.x+w>=x and r.y<=y and r.y+h>=y then return 1 else return 0 end
 end
 basic.registercom("SPSET","SN.")
@@ -2199,8 +2205,9 @@ function basic_func.BTNEXEC(vname,setname,param)
 	for i,v in ipairs(basic.draworderset[setname]) do
 		local nm=v.name
 		if basic.spriteset[setname][nm].btn then
-			orderx[#orderx+1]={name=nm,x=basic.spriteset[setname][nm].x,y=basic.spriteset[setname][nm].y}
-			ordery[#ordery+1]={name=nm,x=basic.spriteset[setname][nm].x,y=basic.spriteset[setname][nm].y}
+			local btn = basic.spriteset[setname][nm]
+			orderx[#orderx+1]={name=nm,x=btn.x or btn.cx,y=btn.y or btn.cy}
+			ordery[#ordery+1]={name=nm,x=btn.x or btn.cx,y=btn.y or btn.cy}
 		end
 	end
 
