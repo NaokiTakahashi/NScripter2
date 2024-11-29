@@ -64,6 +64,7 @@ btn "window:log"
 btn "window:config"
 
 @textb_loop
+if _already==1 and tchk()==0 then skip 0
 if getskip()==1 then return
 if getskip()==2 then
 	btnexec %ret,"window",{wheel=1,ctrl=1,automode=1,time=(6-_autospeed)*500}
@@ -258,11 +259,12 @@ sp "cfg:title_top",{name="?＜コンフィグメニュー＞,menu1",x=350,y=150,z=10}
 sp "cfg:title0",{name="?画面モード　　　,menu1",x=170,y=240,z=10}
 sp "cfg:title1",{name="?テキスト表示速度,menu1",x=170,y=280,z=10}
 sp "cfg:title2",{name="?オートモード速度,menu1",x=170,y=320,z=10}
-sp "cfg:title3",{name="?ＢＧＭ音量　　　,menu1",x=170,y=360,z=10}
-sp "cfg:title4",{name="?ボイス音量　　　,menu1",x=170,y=400,z=10}
-sp "cfg:title5",{name="?ＳＥ音量　　　　,menu1",x=170,y=440,z=10}
-sp "cfg:title6",{name={"?リセットする,menu0","?リセットする,menu1"},x=170,y=480,z=10}
-sp "cfg:title7",{name={"?終了する,menu0","?終了する,menu1"},x=170,y=520,z=10}
+sp "cfg:title3",{name="?ＢＧＭ音量　　　,menu1",x=170,y=400,z=10}
+sp "cfg:title4",{name="?ボイス音量　　　,menu1",x=170,y=440,z=10}
+sp "cfg:title5",{name="?ＳＥ音量　　　　,menu1",x=170,y=480,z=10}
+sp "cfg:title6",{name={"?リセットする,menu0","?リセットする,menu1"},x=170,y=520,z=10}
+sp "cfg:title7",{name={"?終了する,menu0","?終了する,menu1"},x=170,y=560,z=10}
+sp "cfg:title8",{name="?既読スキップ,menu1",x=170,y=360,z=10} ; 後から付け加えたので座標が食い違っててすみません
 @config_btnload
 btnclear "cfg"
 
@@ -275,6 +277,16 @@ else
 	sp "cfg:window",{name={"?ウィンドウ,menu0","?ウィンドウ,menu1"},x=450,y=240,z=10}
 	sp "cfg:full",{name="?フルスクリーン,menu1",x=620,y=240,z=10}
 	btn "cfg:window"
+end if
+
+if _already==0 then
+  sp "cfg:already_off",{name="?全て,menu1",x=450,y=360,z=10}
+  sp "cfg:already_on",{name={"?既読のみ,menu0","?既読のみ,menu1"},x=620,y=360,z=10}
+  btn "cfg:already_on"
+else
+  sp "cfg:already_off",{name={"?全て,menu0","?全て,menu1"},x=450,y=360,z=10}
+  sp "cfg:already_on",{name="?既読のみ,menu1",x=620,y=360,z=10}
+  btn "cfg:already_off"
 end if
 
 for %i=0 to 6
@@ -296,26 +308,26 @@ for %i=0 to 6
 	end if
 
 	if _bgmvol==%i then
-		sp "cfg:bgm"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=360,z=10}
+		sp "cfg:bgm"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=400,z=10}
 	else
 		%str="?"+zenkaku(str(%i))
-		sp "cfg:bgm"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=360,z=10}
+		sp "cfg:bgm"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=400,z=10}
 		btn "cfg:bgm"+str(%i)
 	end if
 
 	if _voicevol==%i then
-		sp "cfg:voice"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=400,z=10}
+		sp "cfg:voice"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=440,z=10}
 	else
 		%str="?"+zenkaku(str(%i))
-		sp "cfg:voice"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=400,z=10}
+		sp "cfg:voice"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=440,z=10}
 		btn "cfg:voice"+str(%i)
 	end if
 
 	if _sevol==%i then
-		sp "cfg:se"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=440,z=10}
+		sp "cfg:se"+str(%i),{name="?"+zenkaku(str(%i))+",menu1",x=450+%i*55,y=480,z=10}
 	else
 		%str="?"+zenkaku(str(%i))
-		sp "cfg:se"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=440,z=10}
+		sp "cfg:se"+str(%i),{name={%str+",menu0",%str+",menu1"},x=450+%i*55,y=480,z=10}
 		btn "cfg:se"+str(%i)
 	end if
 next
@@ -337,6 +349,8 @@ end if
 if %ret==#r then spsetdelete "cfg":return
 if %ret=="window" then setscreen 0:goto @config_btnload
 if %ret=="full" then setscreen 1:goto @config_btnload
+if %ret=="already_on" then _already=1:goto @config_btnload
+if %ret=="already_off" then _already=0:goto @config_btnload
 if %ret==#sizechange then goto @config_btnload ; Alt+ENTERもしくは最大化ボタン対策
 if left(%ret,4)=="text" then
 	_textspeed=num(mid(%ret,4,100))
@@ -394,6 +408,7 @@ _autospeed=3        ;オートモードの速度(0-6)
 _bgmvol=6           ;BGMのボリューム(0-6)
 _voicevol=6         ;VOICEのボリューム(0-6)
 _sevol=6            ;SEのボリューム(0-6)
+_already=1          ;既読スキップフラグ(1で既読スキップ)
 return
 
 ;-------------------------------
