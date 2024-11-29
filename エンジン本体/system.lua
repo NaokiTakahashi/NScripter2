@@ -1838,6 +1838,17 @@ function basic_func.SPMOVELT(name,cx,cy,xs,ys,rot,a)
 	r.rot=rot
 end
 
+function basic.__rotatepoint(x, y, cx, cy, rot)
+    local tx = x - cx
+    local ty = y - cy
+    local cos_rot = math.cos(-rot)
+    local sin_rot = math.sin(-rot)
+    local rx = tx * cos_rot - ty * sin_rot
+    local ry = tx * sin_rot + ty * cos_rot
+    rx = rx + cx
+    ry = ry + cy    
+    return rx, ry
+end
 basic.registerfunc("SPHITCHECK","SNN")
 function basic_func.SPHITCHECK(name,x,y)
 	local setname,spname=basic.spnamesplit(name)
@@ -1849,13 +1860,17 @@ function basic_func.SPHITCHECK(name,x,y)
 	if r.visible==0 then return 0 end
 	local w,h=basic.texture[name..":"..r.cell]:getsize()
 	if not r.x then
-		-- 拡大縮小タイプの場合は簡易の処理をする
-		-- 回転への対応はしんどいのでいったん抜きで(需要がありそうならやるかも)
 		local sw = w * r.xs
 		local sh = h * r.ys
 		local sx = r.cx - sw / 2
 		local sy = r.cy - sh / 2
-		if sx<=x and sx+sw>=x and sy<=y and sy+h>=y then return 1 else return 0 end
+		local rot = r.rot
+		if rot==0 then
+			if sx<=x and sx+sw>=x and sy<=y and sy+h>=y then return 1 else return 0 end
+		else
+			local tx,ty = basic.__rotatepoint(x,y,r.cx,r.cy,-rot)
+			if sx<=tx and sx+sw>=tx and sy<=ty and sy+h>=ty then return 1 else return 0 end
+		end
 	end
 	if r.x<=x and r.x+w>=x and r.y<=y and r.y+h>=y then return 1 else return 0 end
 end
