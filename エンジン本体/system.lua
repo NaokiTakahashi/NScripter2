@@ -2168,7 +2168,11 @@ local function btnexec_setmouse(setname,spname)
 	end
 	local w,h=basic.texture[tname]:getsize()
 	if sp then
-		gui.setmouse(math.floor(sp.x+w/2),math.floor(sp.y+h/2))
+		if sp.x then
+			gui.setmouse(math.floor(sp.x+w/2),math.floor(sp.y+h/2))
+		else
+			gui.setmouse(math.floor(sp.cx),math.floor(sp.cy))
+		end
 	end
 end
 
