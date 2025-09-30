@@ -3089,6 +3089,11 @@ function basic_func.SPPUTTEXT(name,cell,str,param,rparam)
 	basic.FONT_PUT_FORMAT(t,str,opt,ropt,true)
 end
 
+basic.registercom("PUTTEXT","S")
+function basic_func.PUTTEXT(s)
+	s = ">" .. s
+	basic.exec(s)
+end
 
 ------------------------------------
 -- スキップ関連

@@ -65,6 +65,7 @@
 <li><A HREF="#c01_09">exec</A>
 <li><A HREF="#c01_10">getlogtext</A>
 <li><A HREF="#c01_11">novelmode</A>
+<li><A HREF="#c01_12">puttext</A>
 </ul>
 </table>
 <h4>関数</h4>
@@ -1079,6 +1080,13 @@ getlogtext 12,%tag,%text ; 12個前の表示文のタグと本文テキストを
 <dd>ノベルモードに設定します。mode=1でノベルモード、0でADVモード(0がデフォルト)です。<br>
 ノベルモードでは表示文ごとに自動で改ページされなくなるほか、いくつか専用の命令が使えるようになります。詳しくはサンプルを御覧ください。<br>
 このモードは通常のセーブファイルにセーブされます。(system.luaで実装)<br>
+<p><a href="#top01">目次に戻る</a></p>
+<A name="c01_12"></A>
+<dt>puttext str
+<dd>指定した文字列を通常の表示文として実行します。
+<pre><code>
+puttext "Hello World!"
+</code></pre>
 <p><a href="#top01">目次に戻る</a></p>
 <A name="f01_01"></A>
 <dt>flag=getskip()
