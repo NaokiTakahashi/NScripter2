@@ -113,11 +113,27 @@ local lastlog
 --特殊：basic.textは表示文に対応しています。登録の必要はありません。
 function basic.text(stag,stext)
 	if stag==nil and stext==nil then return end
-	local logtbl={tag=stag,text=stext}
-	basic.backlog[basic.backlogheader]=logtbl
-	lastlog=basic.backlog[basic.backlogheader]
-	basic.backlogheader=basic.backlogheader+1
-	if basic.backlogheader>basic.backlogsize then basic.backlogheader=1 end
+	local logtbl
+	if stext:sub(-1) == "_" then
+		if basic.prev_under_score_text then
+			basic.continue_text = true
+		end
+		basic.prev_under_score_text = stext
+		basic.prev_under_score_tag = stag
+	else
+		if basic.prev_under_score_text then
+			basic.continue_text = true
+			logtbl={tag=basic.prev_under_score_tag,text=basic.prev_under_score_text:sub(1,-2) .. stext}
+		else
+			logtbl={tag=stag,text=stext}
+		end
+		basic.prev_under_score_text = nil
+		basic.prev_under_score_tag = nil
+		basic.backlog[basic.backlogheader]=logtbl
+		lastlog=basic.backlog[basic.backlogheader]
+		basic.backlogheader=basic.backlogheader+1
+		if basic.backlogheader>basic.backlogsize then basic.backlogheader=1 end
+	end
 	basic.exec_call("@text",stag,stext)
 end
 
@@ -2806,7 +2822,7 @@ function basic.FONT_PUT_FORMAT(target,str,opt,rubyopt,putflag)
 			p_rubyopt=rubyopt
 			p_textf=textf
 			p_rubyf=rubyf
-			if basic.novelmode==0 or basic.clearflag==true then
+			if (basic.novelmode==0 and not basic.continue_text) or basic.clearflag==true then
 				--逐次モード改ページ処理
 				target:fill(0)
 				--表示開始位置
@@ -2814,6 +2830,12 @@ function basic.FONT_PUT_FORMAT(target,str,opt,rubyopt,putflag)
 				texty=opt.y
 				--フラグクリア
 				basic.clearflag=false
+				basic.continue_text=false
+			elseif basic.continue_text then
+				--_継続モード：前テキストの末尾位置からそのまま続ける
+				textx=p_textx
+				texty=p_texty
+				basic.continue_text=false
 			else
 				--逐次モード改行処理
 				textx=opt.x
@@ -2874,8 +2896,10 @@ function basic.FONT_PUT_FORMAT(target,str,opt,rubyopt,putflag)
 			if rubymode~=nil then
 				error("ルビが正しく記述されていません。")
 			end
-			p_textx = textx
-			p_texty = texty
+			if putflag then
+				p_textx = textx
+				p_texty = texty
+			end
 			break
 		end
 		if c==SPCHAR[1] and rubymode==nil then
@@ -3214,6 +3238,8 @@ function basic.obj_init()
 	collectgarbage("collect")
 	basic.skippause=0
 	basic.novelmode=0
+	basic.prev_under_score_text = nil
+	basic.continue_text = false
 end
 
 function basic.onreset()
